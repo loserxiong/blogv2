@@ -1,22 +1,26 @@
 import type { GithubConfig, Link, PostConfig, Project, ProjectConfig, Site, SkillsShowcaseConfig, SocialLink, TagsConfig } from '~/types'
 
 export const SITE: Site = {
-  title: 'Litos',
-  description: 'Litos is a blog theme built with Astro.js and Dnzzk2.',
+  title: 'Jiasheng\'s Blog',
+  description: 'Personal website for Jiasheng Xiong',
   website: 'https://litos.vercel.app/',
   base: '/',
-  author: 'Dnzzk2',
+  author: 'Jiasheng Xiong',
   ogImage: '/og-image.jpg',
 }
 
 export const HEADER_LINKS: Link[] = [
   {
-    name: 'Posts',
-    url: '/posts',
+    name: 'Resume',
+    url: '/resume',
   },
   {
     name: 'Projects',
     url: '/projects',
+  },
+  {
+    name: 'Posts',
+    url: '/posts',
   },
 ]
 
@@ -26,12 +30,16 @@ export const FOOTER_LINKS: Link[] = [
     url: '/',
   },
   {
-    name: 'Posts',
-    url: '/posts',
+    name: 'Resume',
+    url: '/resume',
   },
   {
     name: 'Projects',
     url: '/projects',
+  },
+  {
+    name: 'Posts',
+    url: '/posts',
   },
   {
     name: 'Tags',
@@ -45,12 +53,11 @@ export const SOCIAL_LINKS: SocialLink[] = [
     name: 'github',
     url: 'https://github.com/yourname',
     icon: 'icon-[ri--github-fill]',
-    count: 12,
   },
   {
-    name: 'twitter',
-    url: 'https://x.com/yourname',
-    icon: 'icon-[ri--twitter-x-fill]',
+    name: 'rednote',
+    url: 'https://reddit.com/user/yourname',
+    icon: 'icon-[ri--rednote-fill]',
   },
   {
     name: 'bilibili',
@@ -70,7 +77,7 @@ export const SOCIAL_LINKS: SocialLink[] = [
  * get icon https://icon-sets.iconify.design/
  */
 export const SKILLSSHOWCASE_CONFIG: SkillsShowcaseConfig = {
-  SKILLS_ENABLED: true,
+  SKILLS_ENABLED: false,
   SKILLS_DATA: [
     {
       direction: 'left',
@@ -155,23 +162,23 @@ export const SKILLSSHOWCASE_CONFIG: SkillsShowcaseConfig = {
  */
 
 export const GITHUB_CONFIG: GithubConfig = {
-  ENABLED: true,
+  ENABLED: false,
   GITHUB_USERNAME: 'Dnzzk2',
   TOOLTIP_ENABLED: true,
 }
 
 export const POSTS_CONFIG: PostConfig = {
   title: 'Posts',
-  description: 'Posts by Dnzzk2',
-  introduce: 'Here, I will share the usage instructions for this theme to help you quickly use it.',
-  author: 'Dnzzk2',
+  description: 'Posts by Jiasheng Xiong',
+  introduce: '最近的积累和思考',
+  author: 'Jiasheng Xiong',
   homePageConfig: {
     size: 5,
-    type: 'compact',
+    type: 'time-line',
   },
   postPageConfig: {
     size: 10,
-    type: 'image',
+    type: 'compact',
   },
   tagsPageConfig: {
     size: 10,
@@ -205,7 +212,7 @@ export const PROJECTS_CONFIG: ProjectConfig = {
 // get icon https://icon-sets.iconify.design/
 export const ProjectList: Project[] = [
   {
-    name: 'Litos',
+    name: '这是blog的格式',
     description: 'A Simple & Modern Blog Theme for Astro.',
     githubUrl: 'https://github.com/Dnzzk2/Litos',
     website: 'https://litos.vercel.app/',
