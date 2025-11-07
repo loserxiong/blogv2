@@ -11,10 +11,6 @@ export const SITE: Site = {
 
 export const HEADER_LINKS: Link[] = [
   {
-    name: 'Resume',
-    url: '/resume',
-  },
-  {
     name: 'Projects',
     url: '/projects',
   },
@@ -28,10 +24,6 @@ export const FOOTER_LINKS: Link[] = [
   {
     name: 'Readme',
     url: '/',
-  },
-  {
-    name: 'Resume',
-    url: '/resume',
   },
   {
     name: 'Projects',
@@ -50,19 +42,14 @@ export const FOOTER_LINKS: Link[] = [
 // get icon https://icon-sets.iconify.design/
 export const SOCIAL_LINKS: SocialLink[] = [
   {
-    name: 'github',
-    url: 'https://github.com/yourname',
-    icon: 'icon-[ri--github-fill]',
+    name: 'strava',
+    url: 'https://www.strava.com/athletes/124855661',
+    icon: 'icon-[bi--strava]',
   },
   {
     name: 'rednote',
-    url: 'https://reddit.com/user/yourname',
-    icon: 'icon-[ri--rednote-fill]',
-  },
-  {
-    name: 'bilibili',
-    url: 'https://space.bilibili.com/yourSpaceId',
-    icon: 'icon-[ri--bilibili-fill]',
+    url: 'https://xhslink.com/m/8expZCsqVza',
+    icon: 'icon-[famicons--share-social-sharp]',
   },
 ]
 

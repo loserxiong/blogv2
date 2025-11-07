@@ -21,9 +21,9 @@ const posts = postsSort(allPosts).slice(0, size)
 <Layout title="Readme" description={SITE.description}>
   <div class="relative z-[1]">
     <div class="py-8 pb-10 px-6 sm:px-8">
-      <h1 class="flex flex-col gap-2">
-        <span class="text-4xl sm:text-5xl tracking-tight"> Jiasheng 的博客 </span>
-        <span class="text-muted-foreground font-light text-xl sm:text-2xl block tracking-wide text-balance">
+      <h1 class="flex flex-col gap-5">
+        <span class="text-4xl sm:text-5xl tracking-tight"> Jaason Xiong </span>
+        <span class="text-muted-foreground font-light text-base sm:text-lg block tracking-wide text-balance">
           产品经理 | 跑者 | 装备控
         </span>
       </h1>
@@ -67,9 +67,7 @@ const posts = postsSort(allPosts).slice(0, size)
     <SectionDivider />
     <div class="py-8 pb-10 px-6 sm:px-8">
       <h2 class="text-3xl">Posts</h2>
-      <p class="text-muted-foreground mb-6 mt-1">
-        Recent {posts.length} blog posts, hoping to be helpful.
-      </p>
+      <p class="text-muted-foreground mb-6 mt-1">记录下最近的输出和思考</p>
       <List {posts} {type} heroImageLayout={POSTS_CONFIG.homePageConfig?.heroImageLayout} />
     </div>
   </div>

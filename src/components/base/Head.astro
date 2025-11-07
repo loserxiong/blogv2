@@ -15,7 +15,12 @@ const ogImage = new URL(image || SITE.ogImage, Astro.url)
 ---
 
 <script is:inline src="/js/theme.js"></script>
-<link rel="stylesheet" href="/fonts/ShangguSansSC-VF/result.css" media="print" />
+<!-- 中文字体：OPPO Sans（主要字体） --><!-- 备用：思源黑体（通过 Google Fonts，作为备用） -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet" />
+<!-- 备用：本地字体（仅在 Google Fonts 加载失败时使用） -->
+<link rel="stylesheet" href="/fonts/ShangguSansSC-VF/result.css" />
 
 <!-- 页面内SEO  On-Page SEO -->
 <meta charset="UTF-8" />
@@ -46,6 +51,10 @@ const ogImage = new URL(image || SITE.ogImage, Astro.url)
 <!-- 预加载 -->
 <link rel="preload" href="/fonts/Onest[wght].woff2" as="font" type="font/woff2" crossorigin="anonymous" />
 <link rel="preload" href="/fonts/Lexend-VariableFont_wght.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+<!-- 预加载 OPPO Sans 中文字体 -->
+<link rel="preload" href="/fonts/OPPOSans4.0.ttf" as="font" type="font/ttf" crossorigin="anonymous" />
+<!-- 预加载思源黑体（通过 Google Fonts，作为备用） -->
+<link rel="dns-prefetch" href="https://fonts.gstatic.com" />
 
 <link rel="prefetch" href="/fonts/Geist[wght].woff2" as="font" type="font/woff2" crossorigin="anonymous" />
 <link rel="prefetch" href="/fonts/ZhudouSansVF-subset.woff2" as="font" type="font/woff2" crossorigin="anonymous" />

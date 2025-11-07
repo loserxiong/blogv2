@@ -53,6 +53,8 @@ const ThemeToggle = () => {
     root.classList.add('disable-transition')
 
     const isDark = newTheme === 'dark' || (newTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+    // 与 /public/js/theme.js 保持一致：同步设置 data-theme 与 .dark
+    root.setAttribute('data-theme', isDark ? 'dark' : 'light')
     root.classList.toggle('dark', isDark)
 
     // 移除过渡类
@@ -68,6 +70,15 @@ const ThemeToggle = () => {
       system: 'light',
     }
     themeStore.set(themeMap[theme] as 'light' | 'dark' | 'system')
+  }
+
+  // 在水合完成前先渲染一个静态图标，避免初始 variants 为 hidden 时不可见
+  if (!mounted) {
+    return (
+      <button onClick={handleClick} className="relative size-5 flex items-center justify-center cursor-pointer" aria-label="切换主题">
+        <span className="icon-[majesticons--monitor-line] size-5"></span>
+      </button>
+    )
   }
 
   return (

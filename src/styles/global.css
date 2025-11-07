@@ -70,6 +70,24 @@
     font-display: swap;
   }
 
+  /* 中文字体：OPPO Sans */
+  @font-face {
+    font-family: 'OPPO Sans';
+    src: url('/fonts/OPPOSans4.0.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  /* OPPO Sans 粗体 */
+  @font-face {
+    font-family: 'OPPO Sans';
+    src: url('/fonts/OPPOSans4.0.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+  }
+
   /* 等宽字体 */
   @font-face {
     font-family: 'DM Mono';
@@ -89,9 +107,11 @@
 @layer base {
   :root {
     /* 字体族 */
-    --font-lexend: 'Lexend', 'CJKEmDash', 'Nubmers', 'Onest', 'ShangguSansSCVF', sans-serif;
-    --font-sans: 'CJKEmDash', 'Nubmers', 'Onest', 'ShangguSansSCVF', system-ui, sans-serif;
-    --font-dm-mono: 'DM Mono', 'Input Mono', 'Fira Code', 'ShangguSansSCVF', monospace;
+    --font-lexend: 'Lexend', 'OPPO Sans', 'CJKEmDash', 'Nubmers', 'Onest', 'Noto Sans SC', 'ShangguSansSCVF', sans-serif;
+    --font-sans: 'OPPO Sans', 'CJKEmDash', 'Nubmers', 'Onest', 'Noto Sans SC', 'ShangguSansSCVF', system-ui, sans-serif;
+    --font-dm-mono: 'DM Mono', 'Input Mono', 'Fira Code', 'OPPO Sans', 'Noto Sans SC', 'ShangguSansSCVF', monospace;
+    /* 中文字体（专门用于中文内容） */
+    --font-chinese: 'OPPO Sans', 'Noto Sans SC', 'ShangguSansSCVF', sans-serif;
 
     /* 基础色调 */
     /* gray */
@@ -180,12 +200,20 @@
 
   /* 标题样式 */
   h1,
+  h1 *,
   h2,
+  h2 *,
   h3,
+  h3 *,
   h4,
+  h4 *,
   h5,
-  h6 {
-    @apply font-serif font-medium! tracking-tight;
+  h5 *,
+  h6,
+  h6 * {
+    @apply font-medium! tracking-tight;
+    /* 标题字体：英文使用 Lexend，中文使用 OPPO Sans */
+    font-family: 'Lexend', 'OPPO Sans', 'CJKEmDash', 'Nubmers', 'Onest', 'Noto Sans SC', 'ShangguSansSCVF', sans-serif !important;
   }
 
   /* 链接样式 */
