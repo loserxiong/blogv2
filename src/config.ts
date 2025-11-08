@@ -165,7 +165,8 @@ export const POSTS_CONFIG: PostConfig = {
   },
   postPageConfig: {
     size: 10,
-    type: 'compact',
+    type: 'image',
+    heroImageLayout: 'right',
   },
   tagsPageConfig: {
     size: 10,
@@ -187,25 +188,22 @@ export const POSTS_CONFIG: PostConfig = {
 export const TAGS_CONFIG: TagsConfig = {
   title: 'Tags',
   description: 'All tags of Posts',
-  introduce: 'All the tags for posts are here, you can click to filter them.',
+  introduce: '所有的标签都在这了',
 }
 
 export const PROJECTS_CONFIG: ProjectConfig = {
   title: 'Projects',
-  description: 'The examples of my projects.',
-  introduce: 'The examples of my projects.',
+  description: '一些完成的项目',
+  introduce: '一些完成的项目',
 }
 
 // get icon https://icon-sets.iconify.design/
 export const ProjectList: Project[] = [
   {
-    name: '这是blog的格式',
-    description: 'A Simple & Modern Blog Theme for Astro.',
-    githubUrl: 'https://github.com/Dnzzk2/Litos',
-    website: 'https://litos.vercel.app/',
+    name: 'RouteMyPath',
+    description: 'RouteMyPath is a Figma plugin designed for runners, designers, and creators who want to bring their workout journeys into their visual work.',
+    website: 'https://www.figma.com/community/plugin/1514168412744601967/routemypath',
     type: 'image',
-    icon: '/projects/logo.png',
-    star: 16,
-    fork: 5,
+    icon: '/projects/route.png',
   },
 ]
