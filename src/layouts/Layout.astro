@@ -6,6 +6,7 @@ import { SITE } from '~/config'
 import Head from '~/components/base/Head.astro'
 import Header from './Header.astro'
 import Footer from './Footer.astro'
+import Analytics from '@vercel/analytics/astro'
 
 type Props = {
   title: string
@@ -31,5 +32,6 @@ const { title, description, image }: Props = Astro.props
       class="pointer-events-none fixed bottom-0 left-0 h-28 w-full z-50 bg-background [mask-image:linear-gradient(transparent,hsl(var(--background)))]"
     >
     </div>
+    <Analytics />
   </body>
 </html>
