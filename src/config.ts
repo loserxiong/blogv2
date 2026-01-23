@@ -205,5 +205,12 @@ export const ProjectList: Project[] = [
     website: 'https://www.figma.com/community/plugin/1514168412744601967/routemypath',
     type: 'image',
     icon: '/projects/route.png',
+  },  
+  {
+    name: 'AudioSwitch',
+    description: 'RouteMyPath is a Figma plugin designed for runners, designers, and creators who want to bring their workout journeys into their visual work.',
+    website: 'https://github.com/loserxiong/AudioSwitch',
+    type: 'image',
+    icon: '/projects/audioswitch.png',
   },
 ]
