@@ -208,7 +208,7 @@ export const ProjectList: Project[] = [
   },  
   {
     name: 'AudioSwitch',
-    description: 'RouteMyPath is a Figma plugin designed for runners, designers, and creators who want to bring their workout journeys into their visual work.',
+    description: 'A lightweight macOS menu bar application for quickly switching audio output devices.',
     website: 'https://github.com/loserxiong/AudioSwitch',
     type: 'image',
     icon: '/projects/audioswitch.png',
