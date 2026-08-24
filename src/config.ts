@@ -16,7 +16,7 @@ import type {
 export const SITE: Site = {
   title: "Jiasheng's Blog",
   description: 'Personal website for Jiasheng Xiong',
-  website: 'https://litos.vercel.app/',
+  website: 'https://cool-praline-3ccb6c.netlify.app/',
   lang: 'zh-CN',
   base: '/',
   author: 'Jiasheng Xiong',
