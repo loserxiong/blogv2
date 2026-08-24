@@ -6,6 +6,7 @@ import remarkImgAttr from 'remark-imgattr'
 import remarkMath from 'remark-math'
 import remarkReadingTime from './remark-reading-time'
 import remarkLQIP from './remark-lqip.js'
+import remarkGithubCard from './remark-github-card'
 
 import rehypeSlug from 'rehype-slug'
 import rehypeUnwrapImages from 'rehype-unwrap-images'
@@ -30,13 +31,12 @@ export const remarkPlugins = [
         },
       },
       link: {
-        // faviconSourceUrl: 'https://icon.horse/icon/{domain}',// 1000/month
+        // faviconSourceUrl: 'https://icon.horse/icon/{domain}',// 1000/month 国内建议使用
         faviconSourceUrl: 'https://www.google.com/s2/favicons?domain={domain}&sz=128', // recommended ✨
-        imgProps: (node: Parameters<PropertiesFromTextDirective>[0]) => {
+        imgProps: () => {
           const props: ReturnType<PropertiesFromTextDirective> = {
             'aria-hidden': 'true',
           }
-          if (node.attributes?.class?.includes('github')) props.src = 'https://www.google.com/s2/favicons?domain=github.com&sz=128'
           return props
         },
       },
@@ -55,6 +55,7 @@ export const remarkPlugins = [
   remarkMath,
   remarkReadingTime,
   remarkLQIP,
+  remarkGithubCard,
 ] as RemarkPlugin[]
 
 export const rehypePlugins = [

@@ -1,12 +1,28 @@
-import type { GithubConfig, Link, PostConfig, Project, ProjectConfig, Site, SkillsShowcaseConfig, SocialLink, TagsConfig } from '~/types'
+import type {
+  AnalyticsConfig,
+  CommentConfig,
+  GithubConfig,
+  Link,
+  PhotosConfig,
+  PostConfig,
+  ProjectConfig,
+  Site,
+  SkillsShowcaseConfig,
+  SocialLink,
+  TagsConfig,
+} from '~/types'
 
+//--- Readme Page Config ---
 export const SITE: Site = {
-  title: 'Jiasheng\'s Blog',
+  title: "Jiasheng's Blog",
   description: 'Personal website for Jiasheng Xiong',
   website: 'https://litos.vercel.app/',
+  lang: 'zh-CN',
   base: '/',
   author: 'Jiasheng Xiong',
   ogImage: '/og-image.jpg',
+  transition: false,
+  themeAnimation: true,
 }
 
 export const HEADER_LINKS: Link[] = [
@@ -26,12 +42,12 @@ export const FOOTER_LINKS: Link[] = [
     url: '/',
   },
   {
-    name: 'Projects',
-    url: '/projects',
-  },
-  {
     name: 'Posts',
     url: '/posts',
+  },
+  {
+    name: 'Projects',
+    url: '/projects',
   },
   {
     name: 'Tags',
@@ -71,19 +87,33 @@ export const SKILLSSHOWCASE_CONFIG: SkillsShowcaseConfig = {
       skills: [
         {
           name: 'JavaScript',
-          icon: 'icon-[mdi--language-javascript]',
+          icon: 'icon-[skill-icons--javascript]',
+          url: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript',
         },
         {
           name: 'CSS',
-          icon: 'icon-[mdi--language-css3]',
+          icon: 'icon-[skill-icons--css]',
+          url: 'https://developer.mozilla.org/en-US/docs/Web/CSS',
         },
         {
           name: 'HTML',
-          icon: 'icon-[mdi--language-html5]',
+          icon: 'icon-[skill-icons--html]',
+          url: 'https://developer.mozilla.org/en-US/docs/Web/HTML',
         },
         {
           name: 'TypeScript',
-          icon: 'icon-[mdi--language-typescript]',
+          icon: 'icon-[skill-icons--typescript]',
+          url: 'https://www.typescriptlang.org/',
+        },
+        {
+          name: 'Vue',
+          icon: 'icon-[skill-icons--vuejs-dark]',
+          url: 'https://vuejs.org/',
+        },
+        {
+          name: 'Sass',
+          icon: 'icon-[skill-icons--sass]',
+          url: 'https://sass-lang.com/',
         },
       ],
     },
@@ -92,27 +122,33 @@ export const SKILLSSHOWCASE_CONFIG: SkillsShowcaseConfig = {
       skills: [
         {
           name: 'Astro',
-          icon: 'icon-[lineicons--astro]',
+          icon: 'icon-[skill-icons--astro]',
+          url: 'https://astro.build/',
         },
         {
           name: 'Node.js',
-          icon: 'icon-[mdi--nodejs]',
+          icon: 'icon-[skill-icons--nodejs-dark]',
+          url: 'https://nodejs.org/',
         },
         {
           name: 'React',
-          icon: 'icon-[mdi--react]',
+          icon: 'icon-[skill-icons--react-dark]',
+          url: 'https://react.dev/',
         },
         {
           name: 'Next.js',
-          icon: 'icon-[devicon--nextjs]',
+          icon: 'icon-[skill-icons--nextjs-dark]',
+          url: 'https://nextjs.org/',
         },
         {
           name: 'Tailwind CSS',
-          icon: 'icon-[mdi--tailwind]',
+          icon: 'icon-[skill-icons--tailwindcss-dark]',
+          url: 'https://tailwindcss.com/',
         },
         {
-          name: 'Iconify',
-          icon: 'icon-[line-md--iconify2-static]',
+          name: 'Vite',
+          icon: 'icon-[skill-icons--vite-dark]',
+          url: 'https://vitejs.dev/',
         },
       ],
     },
@@ -121,19 +157,33 @@ export const SKILLSSHOWCASE_CONFIG: SkillsShowcaseConfig = {
       skills: [
         {
           name: 'Ubuntu',
-          icon: 'icon-[mdi--ubuntu]',
+          icon: 'icon-[skill-icons--ubuntu-dark]',
+          url: 'https://ubuntu.com/',
         },
         {
           name: 'Git',
-          icon: 'icon-[mdi--git]',
+          icon: 'icon-[skill-icons--git]',
+          url: 'https://git-scm.com/',
         },
         {
           name: 'MongoDB',
-          icon: 'icon-[lineicons--mongodb]',
+          icon: 'icon-[skill-icons--mongodb]',
+          url: 'https://www.mongodb.com/',
         },
         {
           name: 'Vercel',
-          icon: 'icon-[lineicons--vercel]',
+          icon: 'icon-[skill-icons--vercel-dark]',
+          url: 'https://vercel.com/',
+        },
+        {
+          name: 'VS Code',
+          icon: 'icon-[skill-icons--vscode-dark]',
+          url: 'https://code.visualstudio.com/',
+        },
+        {
+          name: 'Obsidian',
+          icon: 'icon-[skill-icons--obsidian-dark]',
+          url: 'https://obsidian.md/',
         },
       ],
     },
@@ -150,10 +200,11 @@ export const SKILLSSHOWCASE_CONFIG: SkillsShowcaseConfig = {
 
 export const GITHUB_CONFIG: GithubConfig = {
   ENABLED: false,
-  GITHUB_USERNAME: 'Dnzzk2',
+  GITHUB_USERNAME: 'loserxiong',
   TOOLTIP_ENABLED: true,
 }
 
+//--- Posts Page Config ---
 export const POSTS_CONFIG: PostConfig = {
   title: 'Posts',
   description: 'Posts by Jiasheng Xiong',
@@ -166,15 +217,14 @@ export const POSTS_CONFIG: PostConfig = {
   postPageConfig: {
     size: 10,
     type: 'image',
-    heroImageLayout: 'right',
+    coverLayout: 'right',
   },
   tagsPageConfig: {
     size: 10,
     type: 'time-line',
   },
-  defaultHeroImage: '/og-image.jpg',
-  defaultHeroImageAspectRatio: '16/9',
-  postType: 'horizontal',
+  ogImageUseCover: false,
+  postType: 'metaOnly',
   imageDarkenInDark: true,
   readMoreText: 'Read more',
   prevPageText: 'Previous',
@@ -183,6 +233,13 @@ export const POSTS_CONFIG: PostConfig = {
   backToPostsText: 'Back to Posts',
   nextPostText: 'Next Post',
   prevPostText: 'Previous Post',
+  recommendText: 'REC',
+  wordCountView: true,
+}
+
+export const COMMENT_CONFIG: CommentConfig = {
+  enabled: false,
+  system: 'none',
 }
 
 export const TAGS_CONFIG: TagsConfig = {
@@ -197,20 +254,19 @@ export const PROJECTS_CONFIG: ProjectConfig = {
   introduce: '一些完成的项目',
 }
 
-// get icon https://icon-sets.iconify.design/
-export const ProjectList: Project[] = [
-  {
-    name: 'RouteMyPath',
-    description: 'RouteMyPath is a Figma plugin designed for runners, designers, and creators who want to bring their workout journeys into their visual work.',
-    website: 'https://www.figma.com/community/plugin/1514168412744601967/routemypath',
-    type: 'image',
-    icon: '/projects/route.png',
-  },  
-  {
-    name: 'AudioSwitch',
-    description: 'A lightweight macOS menu bar application for quickly switching audio output devices.',
-    website: 'https://github.com/loserxiong/AudioSwitch',
-    type: 'image',
-    icon: '/projects/audioswitch.png',
+export const PHOTOS_CONFIG: PhotosConfig = {
+  title: 'Photos',
+  description: '日常照片',
+  introduce: '日常照片',
+}
+
+export const ANALYTICS_CONFIG: AnalyticsConfig = {
+  vercount: {
+    enabled: false,
   },
-]
+  umami: {
+    enabled: false,
+    websiteId: 'Your websiteId in umami',
+    serverUrl: 'https://cloud.umami.is/script.js',
+  },
+}

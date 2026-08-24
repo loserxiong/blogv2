@@ -1,3 +1,5 @@
+import type { ImageMetadata } from 'astro'
+
 /**
  * 站点基础信息类型 / Site basic information type
  * @description 包含站点标题和描述 / Contains site title and description
@@ -7,48 +9,47 @@
  * @property {string} author - 作者名称 / Author name
  * @property {string} website - 网站地址 / Website address
  * @property {string} ogImage - OGP 图片地址 / OGP image address
+ * @property {boolean} transition - 是否启用过渡动画 / Whether to enable transition animation
+ * @property {boolean} themeAnimation - 是否启用主题动画 / Whether to enable theme animation
  */
 export type Site = {
   title: string
   base: string
   description: string
+  lang: string
   author: string
   website: string
   ogImage: string
+  transition: boolean
+  themeAnimation: boolean
 }
 
 /**
- * 文章封面图宽高比类型 / Hero image aspect ratio type
- * @description 可选值为 '16/9' 和 '3/4' / Possible values: '16/9' and '3/4'
- */
-export type HeroImageAspectRatio = '16/9' | '3/4'
-
-/**
- * 文章封面图布局类型 / Hero image layout type
+ * 文章封面图布局类型 / Cover image layout type
  * @description 可选值为 'left' 和 'right' / Possible values: 'left' and 'right'
  */
-export type HeroImageLayout = 'left' | 'right'
+export type CoverLayout = 'left' | 'right'
 
 /**
  * 文章卡片类型 / PostCardType
  * @description 可选值为 'compact' 、'image' 和 'time-line' / Possible values: 'compact', 'image' and 'timeLine'
  */
-export type PostCardType = 'compact' | 'image' | 'time-line'
+export type PostCardType = 'compact' | 'image' | 'time-line' | 'minimal' | 'cover'
 
 /**
  * 文章卡片页面基础配置接口 / Post card page configuration interface
  * @description 用于配置文章卡片页面的显示方式 / Used to configure how post cards are displayed on pages
  * @property {PostCardType} type - 卡片展示类型 / Card display type
  * @property {number} size - 每页显示数量 / Number of items per page
- * @property {HeroImageLayout} heroImageLayout - 特色图片布局方式 / Hero image layout position
+ * @property {CoverLayout} coverLayout - 特色图片布局方式 / Cover image layout position
  */
 export interface PostCardPageConfig {
   type: PostCardType
   size: number
-  heroImageLayout?: HeroImageLayout
+  coverLayout?: CoverLayout
 }
 
-export type PostType = 'no-image' | 'vertical' | 'horizontal' | 'jap'
+export type PostType = 'metaOnly' | 'coverSplit' | 'coverTop'
 
 /**
  * 文章配置接口 / Post configuration interface
@@ -60,8 +61,7 @@ export type PostType = 'no-image' | 'vertical' | 'horizontal' | 'jap'
  * @property {PostCardPageConfig} homePageConfig - 首页文章展示配置 / Home page posts display configuration
  * @property {PostCardPageConfig} postPageConfig - 文章列表页展示配置 / Posts list page display configuration
  * @property {PostCardPageConfig} tagsPageConfig - 标签页文章展示配置 / Post display configuration for tags page
- * @property {string} defaultHeroImage - 默认文章封面图 / Default hero image for posts
- * @property {HeroImageAspectRatio} defaultHeroImageAspectRatio - 默认图片宽高比 / Default image aspect ratio
+ * @property {boolean} ogImageUseCover - 是否使用文章封面图作为OGP图片 / Whether to use the article cover image as the OGP image
  * @property {boolean} imageDarkenInDark - 是否在暗黑模式下对图片进行暗化处理 / Whether to darken images in dark mode
  * @property {string} readMoreText - "阅读更多"按钮文本 / "Read more" button text
  * @property {string} prevPageText - 上一页按钮文本 / Previous page button text
@@ -79,9 +79,8 @@ export interface PostConfig {
   homePageConfig: PostCardPageConfig
   postPageConfig: PostCardPageConfig
   tagsPageConfig: PostCardPageConfig
-  defaultHeroImage: string
-  defaultHeroImageAspectRatio: HeroImageAspectRatio
   postType: PostType
+  ogImageUseCover: boolean
   imageDarkenInDark: boolean
   readMoreText: string
   prevPageText: string
@@ -90,6 +89,8 @@ export interface PostConfig {
   backToPostsText: string
   nextPostText: string
   prevPostText: string
+  recommendText: string
+  wordCountView: boolean
 }
 
 /**
@@ -107,6 +108,7 @@ export interface TagsConfig {
 export interface Skill {
   icon: string
   name: string
+  url?: string
 }
 
 export interface SkillData {
@@ -180,26 +182,98 @@ export interface ProjectConfig {
 export type IconType = 'icon' | 'image'
 
 /**
- * 项目类型 / Project type
- * @property {string} name - 项目名称 / Project name
- * @property {string} description - 项目描述 / Project description
- * @property {string} url - 项目URL / Project URL
- * @property {string} githubUrl - 项目github地址 / Project github address
- * @property {IconType} type - 项目图标类型 / Project icon type
- * @property {string} icon - 项目图标 / Project icon
- * @property {string} imageClass - 项目图片样式类名 / Project image style class name
- * @property {number} star - 项目star数量 / Project star count
- * @property {number} fork - 项目fork数量 / Project fork count
+ * 拍立得照片变体类型 / Polaroid photo variant types
+ * @description 定义不同宽高比的拍立得照片样式
+ * - 1x1: 正方形比例
+ * - 4x5: 标准拍立得比例
+ * - 4x3: 横向比例
+ * - 3x4: 竖向比例
+ * - 9x16: 竖向比例
  */
+export type PolaroidVariant = '1x1' | '4x5' | '4x3' | '3x4' | '9x16'
 
-export interface Project {
-  name: string
+/**
+ * 图片配置接口 / Photo configuration interface
+ * @property {string | ImageMetadata} src - 图片路径 / Image path
+ * @property {string} alt - 图片描述 / Image description
+ * @property {number} width - 图片宽度 / Image width
+ * @property {number} height - 图片高度 / Image height
+ * @property {PolaroidVariant} variant - 拍立得照片变体 / Polaroid photo variant
+ * @property {string} location - 拍摄地点 / Shooting location
+ * @property {string} date - 拍摄日期 / Shooting date
+ * @property {string} camera - 拍摄设备 / Shooting equipment
+ * @property {string} description - 图片描述 / Image description
+ */
+export interface Photo {
+  src: string | ImageMetadata
+  alt: string
+  width: number
+  height: number
+  variant: PolaroidVariant
+  location?: string
+  date?: string
+  camera?: string
+  description?: string
+}
+
+/**
+ * 图片页面配置接口 / Photos page configuration interface
+ * @property {string} title - 页面标题 / Page title
+ * @property {string} description - 页面描述 / Page description
+ * @property {string} introduce - 页面介绍 / Page introduction
+ */
+export interface PhotosConfig {
+  title: string
   description: string
-  website?: string
-  githubUrl?: string
-  type: IconType
-  icon: string
-  imageClass?: string
-  star?: number
-  fork?: number
+  introduce: string
+}
+
+export type TimelineIconType = 'emoji' | 'icon' | 'color' | 'number' | 'image'
+
+export interface PhotoData {
+  title: string
+  icon: {
+    type: TimelineIconType
+    value: string // emoji | icon-name | color-class | number | image-url
+    fallback?: string // 备用显示
+  }
+  description?: string
+  date: string
+  photos: Photo[]
+  travel?: string
+}
+
+export interface GitalkConfig {
+  clientID: string
+  clientSecret: string
+  repo: string
+  owner: string
+  admin: string[]
+  language?: string
+  perPage?: number
+  pagerDirection?: 'last' | 'first'
+  createIssueManually?: boolean
+  distractionFreeMode?: boolean
+  enableHotKey?: boolean
+}
+
+export interface AnalyticsConfig {
+  vercount?: {
+    enabled: boolean
+  }
+  umami?: {
+    enabled: boolean
+    websiteId: string
+    serverUrl: string
+  }
+  google?: {
+    enabled: boolean
+    id: string
+  }
+}
+
+export interface CommentConfig {
+  enabled: boolean
+  system: 'gitalk' | 'artalk' | 'waline' | 'none'
+  gitalk?: GitalkConfig
 }

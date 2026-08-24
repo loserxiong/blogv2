@@ -1,7 +1,17 @@
-import { useEffect, useState } from 'react'
-import { motion, useAnimation } from 'framer-motion'
+import { useEffect } from 'react'
+import { motion, useAnimation } from 'motion/react'
 import { useStore } from '@nanostores/react'
-import { themeStore } from '~/stores/theme'
+import { themeStore, type Theme } from '~/stores/theme'
+
+declare global {
+  interface Window {
+    __theme?: {
+      applyTheme: (theme: Theme, options?: { disableTransition?: boolean }) => void
+      getStoredTheme: () => Theme
+      setTheme: (theme: Theme, options?: { disableTransition?: boolean }) => void
+    }
+  }
+}
 
 const iconVariants = {
   visible: {
@@ -17,68 +27,34 @@ const iconVariants = {
 }
 
 const ThemeToggle = () => {
-  const [mounted, setMounted] = useState(false)
   const theme = useStore(themeStore)
   const controlsSun = useAnimation()
   const controlsMoon = useAnimation()
   const controlsSystem = useAnimation()
 
   useEffect(() => {
-    setMounted(true)
-    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | 'system'
-    themeStore.set(savedTheme || 'system')
-  }, [])
-
-  useEffect(() => {
-    if (!mounted) return
-
     if (theme === 'system') {
       controlsSun.start('hidden')
       controlsSystem.start('visible')
       controlsMoon.start('hidden')
-    } else {
-      controlsSun.start(theme === 'light' ? 'visible' : 'hidden')
-      controlsMoon.start(theme === 'dark' ? 'visible' : 'hidden')
-      controlsSystem.start('hidden')
+      return
     }
 
-    localStorage.setItem('theme', theme)
-    applyTheme(theme)
-  }, [theme, mounted, controlsSun, controlsMoon, controlsSystem])
-
-  const applyTheme = (newTheme: string) => {
-    const root = document.documentElement
-
-    // 添加过渡类
-    root.classList.add('disable-transition')
-
-    const isDark = newTheme === 'dark' || (newTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
-    // 与 /public/js/theme.js 保持一致：同步设置 data-theme 与 .dark
-    root.setAttribute('data-theme', isDark ? 'dark' : 'light')
-    root.classList.toggle('dark', isDark)
-
-    // 移除过渡类
-    setTimeout(() => {
-      root.classList.remove('disable-transition')
-    }, 300)
-  }
+    controlsSun.start(theme === 'light' ? 'visible' : 'hidden')
+    controlsMoon.start(theme === 'dark' ? 'visible' : 'hidden')
+    controlsSystem.start('hidden')
+  }, [theme, controlsSun, controlsMoon, controlsSystem])
 
   const handleClick = () => {
-    const themeMap = {
+    const themeMap: Record<Theme, Theme> = {
       light: 'dark',
       dark: 'system',
       system: 'light',
     }
-    themeStore.set(themeMap[theme] as 'light' | 'dark' | 'system')
-  }
+    const nextTheme = themeMap[theme]
 
-  // 在水合完成前先渲染一个静态图标，避免初始 variants 为 hidden 时不可见
-  if (!mounted) {
-    return (
-      <button onClick={handleClick} className="relative size-5 flex items-center justify-center cursor-pointer" aria-label="切换主题">
-        <span className="icon-[majesticons--monitor-line] size-5"></span>
-      </button>
-    )
+    themeStore.set(nextTheme)
+    window.__theme?.setTheme(nextTheme)
   }
 
   return (
@@ -91,7 +67,7 @@ const ThemeToggle = () => {
           animate={controlsSun}
           transition={{ duration: 0.2, ease: 'easeInOut' }}
         >
-          <span className="icon-[f7--sun-max-fill] size-5"></span>
+          <span className="icon-[tabler--sun-filled] size-5"></span>
         </motion.div>
         <motion.div
           className="absolute inset-0"
@@ -100,7 +76,7 @@ const ThemeToggle = () => {
           animate={controlsSystem}
           transition={{ duration: 0.2, ease: 'easeInOut' }}
         >
-          <span className="icon-[majesticons--monitor-line] size-5"></span>
+          <span className="icon-[tabler--device-desktop-question] size-5"></span>
         </motion.div>
         <motion.div
           className="absolute inset-0"

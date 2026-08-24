@@ -1,94 +1,87 @@
 ---
-import type { HeroImageAspectRatio } from '~/types'
+import LqipImage from '~/components/base/LqipImage.astro'
 import { formatDate } from '~/lib/utils'
 import { POSTS_CONFIG } from '~/config'
-import PostTag from '~/components/posts/base/PostTag.astro'
-import RecommendBadge from '~/components/posts/base/RecommendBadge.astro'
+import Badge from '~/components/posts/base/Badge.astro'
 import type { CardProps } from './List.astro'
 
 interface Props extends CardProps {}
 
-const { post, index, heroImageLayout }: Props = Astro.props
+const { post, index, coverLayout, class: className, style }: Props = Astro.props
 
-const aspectRatioClass: Record<HeroImageAspectRatio, string> = {
-  '16/9': 'aspect-[16/9]',
-  '3/4': 'aspect-[3/4]',
-}
+// 固定图片尺寸为 1200*630，宽高比约为 1.9:1
+const IMAGE_WIDTH = 1200
+const IMAGE_HEIGHT = 630
 
-const isVertical = post.data.heroImageAspectRatio === '3/4'
-const imagePosition = post.data.heroImageLayout || heroImageLayout || (index % 2 === 1 ? 'right' : 'left')
+const imagePosition = post.data.coverLayout || coverLayout || (index % 2 === 1 ? 'right' : 'left')
 const isReverse = imagePosition === 'right'
-const defaultHeroImage = POSTS_CONFIG.defaultHeroImage
+const recommendText = POSTS_CONFIG.recommendText
 ---
 
-<article class={`group flex flex-col md:flex-row gap-8 ${isReverse ? 'md:flex-row-reverse' : ''}`}>
-  <div class={`${isVertical ? 'md:w-1/4' : 'md:w-2/5'} flex flex-col overflow-hidden`}>
-    <a href={`/posts/${post.slug}`} class="block relative">
-      <div class={`${aspectRatioClass[post.data.heroImageAspectRatio]} overflow-hidden bg-muted/30 relative`}>
-        <div class="absolute inset-0 bg-gradient-to-br from-accent to-muted/50 animate-pulse"></div>
-        <img
-          src={post.data.heroImage || defaultHeroImage}
-          alt={post.data.title}
-          loading="lazy"
-          decoding="async"
-          onload="this.parentElement.querySelector('div').style.display='none';this.style.opacity='1'"
-          class={`w-full h-full object-cover will-change-transform duration-300 group-hover:scale-105 dark:brightness-90 opacity-0`}
-        />
+<article class:list={[`group flex flex-col sm:flex-row gap-6 sm:gap-10 ${isReverse ? 'sm:flex-row-reverse' : ''}`, className]} {style}>
+  <div class="sm:w-2/6 min-[var(--layout-change-width)]:w-2/8 flex flex-col overflow-hidden">
+    <a href={`/posts/${post.id}`} class="block relative">
+      <div class="aspect-[1200/630] overflow-hidden bg-muted/30 relative">
+        {
+          post.data.cover && (
+            <LqipImage
+              src={post.data.cover}
+              alt=""
+              width={IMAGE_WIDTH}
+              height={IMAGE_HEIGHT}
+              loading="lazy"
+              decoding="async"
+              format="webp"
+              class="w-full h-full object-cover"
+            />
+          )
+        }
       </div>
     </a>
-    {
-      !isVertical && (
-        <a
-          href={`/posts/${post.slug}`}
-          class="hidden md:inline-flex mt-4 items-center gap-2 text-sm font-medium text-foreground/90 hover:text-primary transition-colors group/read"
-        >
-          {POSTS_CONFIG.readMoreText}
-          <span class="icon-[ph--arrow-right-light] size-4 transition-transform group-hover/read:translate-x-1" />
-        </a>
-      )
-    }
+    <a
+      href={`/posts/${post.id}`}
+      class="hidden sm:inline-flex mt-2 items-center gap-2 text-sm font-medium text-foreground/60 hover:text-primary transition-colors group/read"
+    >
+      {POSTS_CONFIG.readMoreText}
+      <span class="icon-[ph--arrow-right] size-4 transition-transform group-hover/read:translate-x-1"></span>
+    </a>
   </div>
 
-  <div class={`w-full ${isVertical ? 'md:w-3/4' : 'md:w-3/5'} flex flex-col justify-start`}>
-    <div class="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-3 md:mb-4">
-      {post.data.recommend && <RecommendBadge />}
-      {post.data.tags?.map((tag) => <PostTag tag={tag} />)}
-    </div>
-
-    <div class="flex flex-wrap items-center gap-3 text-xs sm:text-sm text-muted-foreground/90">
-      <time class="flex items-center gap-1.5">
-        <span class="icon-[ph--calendar-blank] size-3.5"></span>
+  <div class="w-full sm:w-4/6 min-[var(--layout-change-width)]:w-6/8 flex flex-col justify-start">
+    <div class="flex flex-wrap items-center gap-4 text-sm text-muted-foreground/90 mb-2">
+      <time class="flex items-center gap-2">
+        <span class="icon-[ph--calendar-blank] size-4"></span>
         {formatDate(post.data.pubDate)}
       </time>
 
       {
         post.data.updatedDate && (
-          <time class="flex items-center gap-1.5">
-            <span class="icon-[ph--clock-clockwise-light] size-3.5" />
+          <time class="flex items-center gap-2">
+            <span class="icon-[ph--clock-clockwise] size-4" />
             {formatDate(post.data.updatedDate)}
           </time>
         )
       }
     </div>
 
-    <a href={`/posts/${post.slug}`} class="mt-2 md:mt-3 group/title">
-      <h2 class="text-xl md:text-2xl font-medium transition-colors group-hover/title:text-primary line-clamp-2">
+    <a href={`/posts/${post.id}`} class="group/title">
+      <div class="text-base font-semibold transition-colors group-hover/title:text-primary line-clamp-2 leading-5 mb-1">
         {post.data.title}
-      </h2>
+      </div>
+      {post.data.description && <p class="text-sm text-muted-foreground/80 line-clamp-3 leading-5 mb-3">{post.data.description}</p>}
     </a>
 
-    {
-      post.data.description && (
-        <p class="text-xs sm:text-sm text-muted-foreground/80 mt-2 md:mt-3 line-clamp-2 leading-relaxed">{post.data.description}</p>
-      )
-    }
+    <div class="flex flex-wrap items-center gap-2 mb-3">
+      {post.data.recommend && <Badge type="recommend" content={recommendText} />}
+      {post.data.tags?.map((tag) => <Badge type="tag" content={tag} />)}
+    </div>
 
-    <a
-      href={`/posts/${post.slug}`}
-      class={`${isVertical ? 'md:inline-flex' : 'md:hidden'} mt-3 inline-flex items-center gap-2 text-sm font-medium text-foreground/90 hover:text-primary transition-colors group/read`}
+    <!-- <a
+      href={`/posts/${post.id}`}
+      class="sm:hidden mt-auto inline-flex items-center gap-2 text-sm font-medium text-foreground/90 hover:text-primary transition-colors group/read"
     >
       {POSTS_CONFIG.readMoreText}
-      <span class="icon-[ph--arrow-right-light] size-4 transition-transform group-hover/read:translate-x-1"></span>
-    </a>
+      <span class="icon-[ph--arrow-right] size-4 transition-transform group-hover/read:translate-x-1"></span>
+    </a> -->
   </div>
 </article>

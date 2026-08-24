@@ -1,7 +1,8 @@
 ---
 import '~/styles/global.css'
-import '~/styles/pro.css'
-import '~/styles/picture.css'
+import '~/styles/markdown.css'
+import '~/styles/lqip.css'
+import '~/styles/github-card.css'
 import { SITE } from '~/config'
 import Head from '~/components/base/Head.astro'
 import Header from './Header.astro'
@@ -12,24 +13,27 @@ type Props = {
   title: string
   description: string
   image?: string
+  disableViewTransition?: boolean
 }
 
-const { title, description, image }: Props = Astro.props
+const { title, description, image, disableViewTransition }: Props = Astro.props
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={SITE.lang} transition:name="root" transition:animate={SITE.transition && !disableViewTransition ? 'fade' : 'none'}>
   <head>
     <Head title={`${title} | ${SITE.title}`} {description} {image} />
   </head>
-  <body>
+  <body class="flex flex-col">
     <Header />
-    <main class="relative fullPage flex-auto border-x border-border/50 max-w-3xl mx-auto">
-      <slot />
-    </main>
+    <div class="grow flex">
+      <main class="relative border-x border-border/50 global-layout-width mx-auto grow min-w-0">
+        <slot />
+      </main>
+    </div>
     <Footer />
     <div
-      class="pointer-events-none fixed bottom-0 left-0 h-28 w-full z-50 bg-background [mask-image:linear-gradient(transparent,hsl(var(--background)))]"
+      class="safari-hidden pointer-events-none bg-white dark:bg-black fixed z-50 bottom-0 left-0 h-28 [mask-image:linear-gradient(transparent,#000000)] w-full"
     >
     </div>
     <Analytics />
