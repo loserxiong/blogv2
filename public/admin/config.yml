@@ -1,0 +1,39 @@
+backend:
+  name: github
+  repo: loserxiong/blogv2
+  branch: main
+  commit_messages:
+    create: 'content: 新建 {{collection}} - {{slug}}'
+    update: 'content: 更新 {{collection}} - {{slug}}'
+    delete: 'content: 删除 {{collection}} - {{slug}}'
+    uploadMedia: 'content: 上传图片 - {{path}}'
+    deleteMedia: 'content: 删除图片 - {{path}}'
+
+locale: zh_Hans
+
+collections:
+  - name: posts
+    label: 文章
+    label_singular: 文章
+    folder: src/content/posts
+    create: true
+    extension: md
+    format: frontmatter
+    slug: '{{slug}}'
+    media_folder: src/assets/images/uploads
+    public_folder: ../../assets/images/uploads
+    summary: '{{title}} — {{pubDate}}'
+    fields:
+      - { label: 标题, name: title, widget: string }
+      - { label: 摘要, name: description, widget: text }
+      - { label: 发布时间, name: pubDate, widget: datetime, format: 'YYYY-MM-DD', date_format: 'YYYY-MM-DD', time_format: false }
+      - { label: 作者, name: author, widget: string, default: 'Jiasheng Xiong' }
+      - { label: 标签, name: tags, widget: list, required: false }
+      - { label: 封面图, name: cover, widget: image, required: false }
+      - { label: 分享图, name: ogImage, widget: image, required: false, hint: '留空时站点会优先使用封面图。' }
+      - { label: 文章卡片样式, name: postType, widget: select, required: false, options: [coverSplit] }
+      - { label: 封面位置, name: coverLayout, widget: select, required: false, options: [right, left] }
+      - { label: 推荐文章, name: recommend, widget: boolean, default: false, required: false }
+      - { label: 置顶, name: pinned, widget: boolean, default: false, required: false }
+      - { label: 草稿, name: draft, widget: boolean, default: false, required: false }
+      - { label: 正文, name: body, widget: markdown }
