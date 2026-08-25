@@ -10,6 +10,10 @@ backend:
     deleteMedia: 'content: 删除图片 - {{path}}'
 
 locale: zh_Hans
+site_url: https://cool-praline-3ccb6c.netlify.app
+display_url: https://cool-praline-3ccb6c.netlify.app
+media_folder: src/assets/images/uploads
+public_folder: ../../assets/images/uploads
 
 collections:
   - name: posts
