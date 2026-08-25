@@ -53,4 +53,29 @@ const projects = defineCollection({
     }),
 })
 
-export const collections = { posts, projects }
+const photos = defineCollection({
+  loader: glob({
+    pattern: '**/*.{md,mdx}',
+    base: './src/content/photos',
+  }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      description: z.string().optional(),
+      date: z.date(),
+      icon: z.string().default('📷'),
+      travel: z.string().optional(),
+      draft: z.boolean().default(false),
+      photos: z
+        .array(
+          z.object({
+            image: image(),
+            alt: z.string().optional(),
+            variant: z.enum(['1x1', '4x5', '4x3', '3x4', '9x16']).default('4x3'),
+          })
+        )
+        .min(1),
+    }),
+})
+
+export const collections = { posts, projects, photos }

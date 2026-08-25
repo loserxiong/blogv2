@@ -41,3 +41,34 @@ collections:
       - { label: 置顶, name: pinned, widget: boolean, default: false, required: false }
       - { label: 草稿, name: draft, widget: boolean, default: false, required: false }
       - { label: 正文, name: body, widget: markdown }
+
+  - name: photos
+    label: 照片集
+    label_singular: 照片集
+    folder: src/content/photos
+    create: true
+    extension: md
+    format: frontmatter
+    slug: '{{slug}}'
+    media_folder: src/assets/photos/uploads
+    public_folder: ../../assets/photos/uploads
+    summary: '{{title}} — {{date}}'
+    fields:
+      - { label: 标题, name: title, widget: string }
+      - { label: 日期, name: date, widget: datetime, format: 'YYYY-MM-DD', date_format: 'YYYY-MM-DD', time_format: false }
+      - { label: 说明, name: description, widget: text, required: false }
+      - { label: 图标, name: icon, widget: string, default: '📷', required: false, hint: '填一个 emoji，例如 🏃、⛰️ 或 📷。' }
+      - { label: 地点, name: travel, widget: string, required: false }
+      - { label: 草稿, name: draft, widget: boolean, default: false, required: false }
+      - label: 照片
+        name: photos
+        widget: list
+        min: 1
+        fields:
+          - { label: 图片, name: image, widget: image }
+          - { label: 图片说明, name: alt, widget: string, required: false }
+          - label: 展示比例
+            name: variant
+            widget: select
+            default: 4x3
+            options: [1x1, 4x5, 4x3, 3x4, 9x16]
