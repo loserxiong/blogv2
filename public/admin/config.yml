@@ -72,3 +72,28 @@ collections:
             widget: select
             default: 4x3
             options: [1x1, 4x5, 4x3, 3x4, 9x16]
+
+  - name: projects
+    label: Projects
+    label_singular: 项目
+    folder: src/content/projects
+    create: true
+    extension: mdx
+    format: frontmatter
+    identifier_field: name
+    slug: '{{slug}}'
+    path: '{{slug}}/index'
+    media_folder: ''
+    public_folder: './'
+    summary: '{{name}}'
+    fields:
+      - { label: 项目名称, name: name, widget: string }
+      - { label: 项目介绍, name: description, widget: text }
+      - { label: 项目网站, name: website, widget: string, hint: '项目主页或下载地址。' }
+      - { label: GitHub 地址, name: githubUrl, widget: string, default: '', required: false }
+      - { label: 图标类型, name: type, widget: hidden, default: image }
+      - { label: 项目图标, name: icon, widget: image, required: false, allow_multiple: false, hint: '会和项目资料保存在同一个文件夹。' }
+      - { label: 图标样式, name: imageClass, widget: string, required: false, hint: '通常留空；只有需要额外 CSS 样式时才填写。' }
+      - { label: Star 数量, name: star, widget: number, value_type: int, min: 0, default: 0 }
+      - { label: Fork 数量, name: fork, widget: number, value_type: int, min: 0, default: 0 }
+      - { label: 草稿, name: draft, widget: boolean, default: false, required: false }
