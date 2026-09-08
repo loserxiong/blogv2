@@ -35,7 +35,14 @@ collections:
       - { label: 标签, name: tags, widget: list, required: false }
       - { label: 封面图, name: cover, widget: image, required: false }
       - { label: 分享图, name: ogImage, widget: image, required: false, hint: '留空时站点会优先使用封面图。' }
-      - { label: 文章卡片样式, name: postType, widget: select, required: false, options: [coverSplit] }
+      - {
+          label: 文章页样式,
+          name: postType,
+          widget: select,
+          required: false,
+          options: [coverSplit, coverTop, metaOnly],
+          hint: '左右图文、顶部大图或纯文字；不上传封面也能正常阅读。',
+        }
       - { label: 封面位置, name: coverLayout, widget: select, required: false, options: [right, left] }
       - { label: 推荐文章, name: recommend, widget: boolean, default: false, required: false }
       - { label: 置顶, name: pinned, widget: boolean, default: false, required: false }
@@ -93,6 +100,15 @@ collections:
       - { label: GitHub 地址, name: githubUrl, widget: string, default: '', required: false }
       - { label: 图标类型, name: type, widget: hidden, default: image }
       - { label: 项目图标, name: icon, widget: image, required: false, allow_multiple: false, hint: '会和项目资料保存在同一个文件夹。' }
+      - {
+          label: 作品截图,
+          name: preview,
+          widget: image,
+          required: false,
+          allow_multiple: false,
+          hint: '可选。使用真实界面或作品图片；留空时展示项目图标。',
+        }
+      - { label: 截图说明, name: previewAlt, widget: string, required: false, hint: '简短描述截图内容，便于无障碍阅读。' }
       - { label: 图标样式, name: imageClass, widget: string, required: false, hint: '通常留空；只有需要额外 CSS 样式时才填写。' }
       - { label: Star 数量, name: star, widget: number, value_type: int, min: 0, default: 0 }
       - { label: Fork 数量, name: fork, widget: number, value_type: int, min: 0, default: 0 }

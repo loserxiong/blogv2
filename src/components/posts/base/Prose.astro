@@ -49,7 +49,7 @@ const { class: className } = Astro.props
       const isDark = document.documentElement.classList.contains('dark')
       document.querySelectorAll('.markdown img:not(:hover):not(.medium-zoom-image--opened):not(.noDarken)').forEach((img) => {
         if (isDark) {
-          img.style.setProperty('filter', 'brightness(0.75) contrast(1.1)')
+          img.style.setProperty('filter', 'brightness(0.9)')
         } else {
           img.style.removeProperty('filter')
         }
@@ -75,7 +75,7 @@ const { class: className } = Astro.props
         })
         img.addEventListener('mouseleave', () => {
           if (document.documentElement.classList.contains('dark')) {
-            img.style.setProperty('filter', 'brightness(0.75) contrast(1.1)')
+            img.style.setProperty('filter', 'brightness(0.9)')
           }
         })
       })

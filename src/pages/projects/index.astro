@@ -1,9 +1,6 @@
 ---
-import { cn } from '~/lib/utils'
 import { PROJECTS_CONFIG } from '~/config'
 import Layout from '~/layouts/Layout.astro'
-import SectionDivider from '~/components/base/SectionDivider.astro'
-import NumberTicker from '~/components/base/NumberTicker'
 import { Image } from 'astro:assets'
 import { getAllProjects } from '~/lib/data'
 import PageTitle from '~/components/base/PageTitle.astro'
@@ -13,99 +10,74 @@ const projects = await getAllProjects()
 ---
 
 <Layout {title} {description}>
-  <div class="relative z-[1] py-8 pb-10">
-    <div class="px-6 sm:px-8">
-      <PageTitle {title} {introduce} />
-    </div>
-    <div class="grid grid-cols-1 fade-up">
+  <div class="relative z-[1] px-6 sm:px-8 pt-10 pb-12">
+    <PageTitle {title} {introduce} />
+    <div class="mt-10 space-y-10">
       {
-        projects.map((project, index) => {
-          let githubRepo = undefined
-          if (project.data.githubUrl) {
-            try {
-              const urlObj = new URL(project.data.githubUrl)
-              if (urlObj.hostname.includes('github.com')) {
-                githubRepo = urlObj.pathname.replace(/^\/|\/$/g, '')
-              }
-            } catch (e) {}
-          }
-
-          return (
-            <div>
-              <div class="group relative hover:bg-muted/30 dark:hover:bg-muted/30 transition-colors duration-300 px-6 sm:px-8 py-4 ">
-                <div class="absolute right-8 top-4 hidden sm:block">
-                  {project.data.type == 'icon' && <span class={cn('size-10', project.data.icon)} />}
-                  {project.data.type == 'image' && project.data?.icon && (
-                    <Image
-                      src={project.data?.icon}
-                      alt="icon"
-                      width={40}
-                      height={40}
-                      class={cn(project.data.imageClass)}
-                      densities={[1, 2]}
-                      loading="lazy"
-                    />
+        projects.map(({ data: project }) => (
+          <article class="pb-10 border-b border-border/60 last:border-0 last:pb-0">
+            <a
+              href={project.website}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`查看 ${project.name}`}
+              class="project-preview group block overflow-hidden rounded-md border border-border/60 bg-muted/25"
+            >
+              {project.preview ? (
+                <Image
+                  src={project.preview}
+                  alt={project.previewAlt || `${project.name} 作品展示`}
+                  width={1200}
+                  class="w-full aspect-[1.9] object-contain p-4 sm:p-6 transition-transform duration-300 group-hover:scale-[1.02]"
+                  loading="lazy"
+                />
+              ) : (
+                <div class="aspect-[1.9] flex flex-col items-center justify-center gap-4 bg-[radial-gradient(ellipse_at_center,var(--color-accent),transparent_75%)]">
+                  {project.icon && (
+                    <Image src={project.icon} alt="" width={96} height={96} class="size-16 sm:size-20 object-contain" loading="lazy" />
                   )}
+                  <span class="font-serif text-2xl sm:text-3xl tracking-tight">{project.name}</span>
                 </div>
+              )}
+            </a>
+            <div class="mt-5 flex items-start justify-between gap-4">
+              <h2 class="post-list-title">
                 <a
-                  href={project.data.website}
+                  href={project.website}
                   target="_blank"
-                  class="inline-flex items-center justify-between font-semibold text-lg/relaxed "
+                  rel="noopener noreferrer"
+                  class="hover:text-[var(--color-highlight)] transition-colors"
                 >
-                  {project.data.name}
+                  {project.name}
                 </a>
-                <p class="pr-0 sm:pr-14 text-muted-foreground mb-3">{project.data.description}</p>
-                <div class="flex flex-col sm:flex-row gap-4 sm:gap-0 items-start sm:items-center justify-between sm:h-14">
-                  <div class="flex gap-4 ">
-                    <div class="flex items-center py-1.5 gap-3">
-                      {project.data.star != null && (
-                        <>
-                          <span class="text-xs uppercase tracking-wide font-medium text-muted-foreground">Stars</span>
-                          <span class="font-semibold text-lg tracking-wider">
-                            <NumberTicker play value={project.data.star} client:load githubRepo={githubRepo} githubType="stars" />
-                          </span>
-                        </>
-                      )}
-                    </div>
-                    <div class="flex items-center py-1.5 gap-3">
-                      {project.data.fork != null && (
-                        <>
-                          <span class="text-xs uppercase tracking-wide font-medium text-muted-foreground">Forks</span>
-                          <span class="font-semibold text-lg tracking-wider">
-                            <NumberTicker play value={project.data.fork} client:load githubRepo={githubRepo} githubType="forks" />
-                          </span>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                  <div class="flex items-center gap-5 text-zinc-500 text-sm z-10 ">
-                    {project.data.website && (
-                      <a
-                        href={project.data.website}
-                        target="_blank"
-                        class="hover:text-zinc-600 dark:hover:text-zinc-100 flex items-center gap-1"
-                      >
-                        <span class="icon-[mdi--web] size-4" />
-                        <span>Website</span>
-                      </a>
-                    )}
-                    {project.data.githubUrl && (
-                      <a
-                        href={project.data.githubUrl}
-                        target="_blank"
-                        class="hover:text-zinc-600 dark:hover:text-zinc-100 flex items-center gap-1"
-                      >
-                        <span class="icon-[mdi--github] size-4" />
-                        <span>GitHub</span>
-                      </a>
-                    )}
-                  </div>
-                </div>
-              </div>
-              <SectionDivider className={index == projects.length - 1 ? 'hidden' : ''} />
+              </h2>
+              {project.icon && (
+                <Image src={project.icon} alt="" width={32} height={32} class="size-8 object-contain shrink-0" loading="lazy" />
+              )}
             </div>
-          )
-        })
+            <p class="mt-2 text-base leading-7 text-muted-foreground max-w-prose">{project.description}</p>
+            <div class="mt-4 flex flex-wrap items-center gap-5 text-sm">
+              <a
+                href={project.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-1.5 text-[var(--color-highlight)] hover:underline underline-offset-4"
+              >
+                {project.website.includes('figma.com/')
+                  ? '在 Figma 中查看'
+                  : project.website === project.githubUrl
+                    ? '查看项目'
+                    : '访问项目'}
+                <span class="icon-[ph--arrow-up-right] size-4" aria-hidden="true" />
+              </a>
+              {project.githubUrl && project.githubUrl !== project.website && (
+                <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" class="text-muted-foreground hover:text-foreground">
+                  GitHub
+                </a>
+              )}
+            </div>
+          </article>
+        ))
       }
     </div>
   </div>

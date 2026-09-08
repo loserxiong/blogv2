@@ -1,14 +1,11 @@
-import { glob } from 'astro/loaders'
+import { contentFiles } from './lib/content-loader'
 import { defineCollection } from 'astro:content'
 import { z } from 'astro/zod'
 import { POSTS_CONFIG } from '~/config'
 import type { CoverLayout, PostType } from '~/types'
 
 const posts = defineCollection({
-  loader: glob({
-    pattern: '**/*.{md,mdx}',
-    base: './src/content/posts',
-  }),
+  loader: contentFiles('./src/content/posts'),
   schema: ({ image }) =>
     z
       .object({
@@ -18,8 +15,8 @@ const posts = defineCollection({
         tags: z.array(z.string()).optional(),
         updatedDate: z.date().optional(),
         author: z.string().default(POSTS_CONFIG.author),
-        cover: image().optional(),
-        ogImage: image().optional(),
+        cover: z.preprocess((value) => (value === '' ? undefined : value), image().optional()),
+        ogImage: z.preprocess((value) => (value === '' ? undefined : value), image().optional()),
         recommend: z.boolean().default(false),
         postType: z.custom<PostType>().optional(),
         coverLayout: z.custom<CoverLayout>().optional(),
@@ -34,10 +31,7 @@ const posts = defineCollection({
 })
 
 const projects = defineCollection({
-  loader: glob({
-    pattern: '**/*.{md,mdx}',
-    base: './src/content/projects',
-  }),
+  loader: contentFiles('./src/content/projects'),
   schema: ({ image }) =>
     z.object({
       name: z.string(),
@@ -45,7 +39,9 @@ const projects = defineCollection({
       githubUrl: z.string(),
       website: z.string(),
       type: z.string(),
-      icon: image().optional(),
+      icon: z.preprocess((value) => (value === '' ? undefined : value), image().optional()),
+      preview: z.preprocess((value) => (value === '' ? undefined : value), image().optional()),
+      previewAlt: z.string().optional(),
       imageClass: z.string().optional(),
       star: z.number(),
       fork: z.number(),
@@ -54,10 +50,7 @@ const projects = defineCollection({
 })
 
 const photos = defineCollection({
-  loader: glob({
-    pattern: '**/*.{md,mdx}',
-    base: './src/content/photos',
-  }),
+  loader: contentFiles('./src/content/photos'),
   schema: ({ image }) =>
     z.object({
       title: z.string(),

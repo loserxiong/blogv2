@@ -1,0 +1,31 @@
+---
+import type { CollectionEntry } from 'astro:content'
+import { formatDate } from '~/lib/utils'
+import { ANALYTICS_CONFIG, POSTS_CONFIG } from '~/config'
+interface Props {
+  frontmatter: CollectionEntry<'posts'>['data']
+  minutesRead?: string | number
+  wordCount?: number
+}
+const { frontmatter, minutesRead, wordCount } = Astro.props
+---
+
+<div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs sm:text-[13px] leading-relaxed text-muted-foreground">
+  <time datetime={frontmatter.pubDate.toISOString()}>{formatDate(frontmatter.pubDate)}</time>
+  {
+    frontmatter.updatedDate && (
+      <span>
+        更新于 <time datetime={frontmatter.updatedDate.toISOString()}>{formatDate(frontmatter.updatedDate)}</time>
+      </span>
+    )
+  }
+  {minutesRead && <span>约 {minutesRead} 分钟阅读</span>}
+  {POSTS_CONFIG.wordCountView && wordCount && <span>约 {wordCount.toLocaleString('zh-CN')} 字</span>}
+  {
+    ANALYTICS_CONFIG.vercount?.enabled && (
+      <span>
+        <span id="vercount_value_page_pv">…</span> 次阅读
+      </span>
+    )
+  }
+</div>

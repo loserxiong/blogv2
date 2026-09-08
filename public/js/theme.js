@@ -1,7 +1,7 @@
 ;(function () {
   const STORAGE_KEY = 'theme'
   const LIGHT_THEME_COLOR = '#FFFFFF'
-  const DARK_THEME_COLOR = '#09090b'
+  const DARK_THEME_COLOR = '#111113'
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)')
   const isMobileViewport = window.matchMedia('(max-width: 767px)')
   const root = document.documentElement

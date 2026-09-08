@@ -6,10 +6,11 @@ interface Props extends Omit<astroHTML.JSX.AnchorHTMLAttributes, 'class' | 'chil
   icon: string
   count?: number
   label?: string
+  name?: string
   class?: string | Record<string, boolean>
 }
 
-const { label, icon, count, class: className, ...props }: Props = Astro.props
+const { name, label, icon, count, class: className, ...props }: Props = Astro.props
 const href = props.href as string
 const isGithub = href?.includes('github.com')
 const githubUser = isGithub ? href.split('/').filter(Boolean).pop() : undefined
@@ -23,10 +24,10 @@ const githubUser = isGithub ? href.split('/').filter(Boolean).pop() : undefined
   )}
   {...props}
   target="_blank"
+  rel="noopener noreferrer"
 >
-  <span
-    class={cn('h-6 w-6 text-muted-foreground transition-all duration-300 ease-out', 'group-hover:text-primary group-hover:rotate-6', icon)}
-  ></span>
+  <span class={cn('h-4 w-4 text-muted-foreground transition-colors', 'group-hover:text-[var(--color-highlight)]', icon)}></span>
+  {name && <span class="text-sm text-muted-foreground group-hover:text-[var(--color-highlight)]">{name}</span>}
   {
     count !== undefined && (
       <span class="text-muted-foreground text-sm transition-colors duration-300 group-hover:text-primary">

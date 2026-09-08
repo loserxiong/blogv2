@@ -1,0 +1,28 @@
+---
+import type { CollectionEntry } from 'astro:content'
+import Badge from './Badge.astro'
+import PostMeta from './PostMeta.astro'
+import { POSTS_CONFIG } from '~/config'
+interface Props {
+  frontmatter: CollectionEntry<'posts'>['data']
+  minutesRead?: string | number
+  wordCount?: number
+}
+const { frontmatter, minutesRead, wordCount } = Astro.props
+---
+
+<div class="min-w-0">
+  <h1 class="post-title" data-pagefind-meta="title" data-pagefind-body>{frontmatter.title}</h1>
+  {frontmatter.description && <p class="mt-4 text-base text-muted-foreground leading-relaxed">{frontmatter.description}</p>}
+  <div class="mt-5"><PostMeta {frontmatter} {minutesRead} {wordCount} /></div>
+  {
+    (frontmatter.recommend || frontmatter.tags?.length) && (
+      <div class="mt-4 flex flex-wrap gap-2">
+        {frontmatter.recommend && <Badge type="recommend" content={POSTS_CONFIG.recommendText} />}
+        {frontmatter.tags?.map((tag) => (
+          <Badge type="tag" content={tag} />
+        ))}
+      </div>
+    )
+  }
+</div>

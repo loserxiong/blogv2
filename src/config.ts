@@ -42,7 +42,7 @@ export const HEADER_LINKS: Link[] = [
 
 export const FOOTER_LINKS: Link[] = [
   {
-    name: 'Readme',
+    name: '首页',
     url: '/',
   },
   {
@@ -144,7 +144,7 @@ export const SKILLSSHOWCASE_CONFIG: SkillsShowcaseConfig = {
           url: 'https://react.dev/',
         },
         {
-          name: 'Next.js',
+          name: '下一页.js',
           icon: 'icon-[skill-icons--nextjs-dark]',
           url: 'https://nextjs.org/',
         },
@@ -234,14 +234,14 @@ export const POSTS_CONFIG: PostConfig = {
   ogImageUseCover: false,
   postType: 'metaOnly',
   imageDarkenInDark: true,
-  readMoreText: 'Read more',
-  prevPageText: 'Previous',
-  nextPageText: 'Next',
-  tocText: 'On this page',
-  backToPostsText: 'Back to Posts',
-  nextPostText: 'Next Post',
-  prevPostText: 'Previous Post',
-  recommendText: 'REC',
+  readMoreText: '阅读全文',
+  prevPageText: '上一页',
+  nextPageText: '下一页',
+  tocText: '文章目录',
+  backToPostsText: '返回文章列表',
+  nextPostText: '下一篇',
+  prevPostText: '上一篇',
+  recommendText: '推荐',
   wordCountView: true,
 }
 

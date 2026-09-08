@@ -6,7 +6,7 @@ import CoverTop from '~/components/posts/layouts/CoverTop.astro'
 import PostNavigation from '~/components/posts/base/PostNavigation.astro'
 import PostFeatures from '~/components/posts/toc/PostFeatures.astro'
 import TocMobile from '~/components/posts/toc/TocMobile.astro'
-import { POSTS_CONFIG, SITE } from '~/config'
+import { POSTS_CONFIG, SITE, COMMENT_CONFIG } from '~/config'
 import { render } from 'astro:content'
 import { getAllPosts } from '~/lib/data'
 import SectionDivider from '~/components/base/SectionDivider.astro'
@@ -42,7 +42,7 @@ const layoutMap: Record<LayoutKey, any> = {
 }
 
 const layoutKey: LayoutKey = (frontmatter.postType as LayoutKey) || (POSTS_CONFIG.postType as LayoutKey)
-const PostLayout = layoutMap[layoutKey]
+const PostLayout = layoutMap[layoutKey] || MetaOnly
 ---
 
 <Layout
@@ -71,9 +71,15 @@ const PostLayout = layoutMap[layoutKey]
       )
     }
     {hasValidHeadings && <PostFeatures {post} {posts} headings={filterHeadings} />}
-    <SectionDivider />
-    <div class="px-6 py-6 sm:px-8 pb-6 sm:pb-8">
-      <Comment id={post.id} title={frontmatter.title} />
-    </div>
+    {
+      COMMENT_CONFIG.enabled && (
+        <>
+          <SectionDivider />
+          <div class="px-6 py-6 sm:px-8 pb-6 sm:pb-8">
+            <Comment id={post.id} title={frontmatter.title} />
+          </div>
+        </>
+      )
+    }
   </div>
 </Layout>

@@ -10,7 +10,7 @@ interface Props {
   showIcon?: boolean
 }
 
-const { type, content, class: className, variant = 'default', size = 'sm', showIcon = true }: Props = Astro.props
+const { type, content, class: className, variant = 'default', size = 'sm', showIcon = false }: Props = Astro.props
 
 const sizeClasses = {
   sm: 'text-xs px-2 py-0.5 gap-1',
@@ -26,7 +26,7 @@ const variantClasses = {
 }
 
 // 根据类型设置默认variant
-const defaultVariant = type === 'recommend' ? 'gradient' : 'default'
+const defaultVariant = type === 'recommend' ? 'subtle' : 'default'
 const finalVariant = variant === 'default' ? defaultVariant : variant
 
 // 图标配置
@@ -42,7 +42,7 @@ const iconClass = iconConfig[type]
   type === 'tag' ? (
     <a
       href={`/tags/${content}`}
-      aria-label={`View posts tagged with ${content}`}
+      aria-label={`查看「${content}」下的文章`}
       class={cn(
         'inline-flex items-center font-medium  transition-colors duration-200 select-none',
         sizeClasses[size],
@@ -61,7 +61,7 @@ const iconClass = iconConfig[type]
         variantClasses[finalVariant],
         className
       )}
-      title="Recommended post"
+      title="推荐文章"
     >
       {showIcon && <span class={iconClass} />}
       <span class="font-semibold tracking-wide">{content}</span>

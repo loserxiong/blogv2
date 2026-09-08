@@ -42,7 +42,7 @@ const getRelativeIndentClass = (depth: number) => {
           <div class="flex gap-4 items-center min-w-0 flex-1">
             <SimpleProgressRing size={16} strokeWidth={2} class="flex-shrink-0" />
             <span id="mobile-toc-current-section" class="text-sm font-medium text-foreground/80 truncate">
-              Overview
+              文章目录
             </span>
           </div>
           <div class="flex items-center gap-2 pl-2">
@@ -97,7 +97,7 @@ const getRelativeIndentClass = (depth: number) => {
 }
 
 <script>
-  const INITIAL_OVERVIEW_TEXT = 'Overview'
+  const INITIAL_OVERVIEW_TEXT = '文章目录'
 
   class MobileTOC {
     // DOM 元素
@@ -251,7 +251,7 @@ const getRelativeIndentClass = (depth: number) => {
         }
       }
 
-      // 如果没找到合适的标题，显示Overview（传入空字符串）
+      // 如果没找到合适的标题，显示文章目录（传入空字符串）
       this.updateActiveHeading(activeHeading?.id || '')
     }
 

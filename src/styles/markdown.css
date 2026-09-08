@@ -6,7 +6,7 @@
 :root {
   /* 颜色系统 - 使用 light-dark() 函数 */
   --color-text-primary: light-dark(#0a0a0a, #d5d5d6);
-  --color-text-secondary: light-dark(#52525b, #a1a1aa);
+  --color-text-secondary: light-dark(#3f4147, #c0c0c5);
   --color-text-muted: light-dark(#6b7280, #9ca3af);
   --color-heading: light-dark(#0a0a0a, #d5d5d6);
   --color-link: light-dark(#0a0a0a, #e5e7eb);
@@ -53,7 +53,7 @@
 .markdown {
   color: var(--color-text-secondary);
   font-size: 1rem;
-  line-height: 1.75;
+  line-height: 1.8;
 
   /* 现代文本换行 */
   & :is(p, li, blockquote) {
@@ -84,14 +84,14 @@
   }
 
   & h1 {
-    font-size: clamp(1.75em, 4vw, 2em);
-    margin-block: 0 1em;
-    line-height: 1.1111111;
+    font-size: clamp(1.4em, 3vw, 1.65em);
+    margin-block: 2.25em 0.85em;
+    line-height: 1.4;
   }
 
   & h2 {
-    font-size: clamp(1.375em, 3vw, 1.5em);
-    margin-block: 1.5em 0.75em;
+    font-size: clamp(1.25em, 2.7vw, 1.4em);
+    margin-block: 2em 0.75em;
     line-height: 1.3333333;
   }
 
@@ -240,7 +240,7 @@
 .markdown {
   & blockquote {
     font-weight: 500;
-    font-style: italic;
+    font-style: normal;
     color: inherit;
     border-inline-start: 0.25rem solid var(--color-border-blockquote);
     margin-block: 1.6em;
@@ -248,7 +248,7 @@
     quotes: '\201C' '\201D' '\2018' '\2019';
 
     & > * {
-      opacity: 0.7;
+      opacity: 1;
 
       &:first-child {
         margin-block-start: 0;
@@ -360,7 +360,7 @@
 }
 
 .dark .markdown img:not(.noDarken) {
-  filter: brightness(0.75) contrast(1.1);
+  filter: brightness(0.9);
 }
 
 /* ===== 表格样式 ===== */
@@ -640,7 +640,7 @@ image-figure-polaroid {
   }
 
   .markdown {
-    font-size: 0.9375rem;
+    font-size: 1rem;
 
     & a.header-anchor {
       font-size: 0.75em;
@@ -684,7 +684,7 @@ image-figure-polaroid {
 @container (width <= 600px) {
   .markdown {
     & h1 {
-      font-size: 1.75em;
+      font-size: 1.5em;
     }
     & h2 {
       font-size: 1.375em;
