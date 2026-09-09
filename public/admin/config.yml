@@ -57,7 +57,7 @@ collections:
     extension: md
     format: frontmatter
     slug: '{{slug}}'
-    media_folder: src/assets/photos/uploads
+    media_folder: ../../assets/photos/uploads
     public_folder: ../../assets/photos/uploads
     summary: '{{title}} — {{date}}'
     fields:
