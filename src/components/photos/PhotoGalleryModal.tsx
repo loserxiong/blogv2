@@ -178,7 +178,8 @@ const PhotoGalleryModal: React.FC<Props> = ({ photos, title, description, isOpen
                   transition={{ type: 'tween', duration: 0.5, ease: 'easeOut' }}
                 >
                   {photos.map((photo, index) => {
-                    const imgSrc = typeof photo.src === 'string' ? photo.src : photo.src.src
+                    const imgSrc = photo.displaySrc || (typeof photo.src === 'string' ? photo.src : photo.src.src)
+                    const shouldLoad = Math.abs(index - currentIndex) <= 1
                     return (
                       <div
                         key={imgSrc}
@@ -188,17 +189,19 @@ const PhotoGalleryModal: React.FC<Props> = ({ photos, title, description, isOpen
                         className="flex items-center justify-center shrink-0"
                         style={{ width: containerWidth }}
                       >
-                        <img
-                          draggable={false}
-                          src={imgSrc}
-                          alt={photo.alt}
-                          className="max-w-full max-h-[70vh] object-contain select-none pointer-events-none"
-                          onLoad={() => {
-                            if (index === currentIndex && imageRefs.current[index]) {
-                              setCurrentHeight(imageRefs.current[index]!.offsetHeight)
-                            }
-                          }}
-                        />
+                        {shouldLoad && (
+                          <img
+                            draggable={false}
+                            src={imgSrc}
+                            alt={photo.alt}
+                            className="max-w-full max-h-[70vh] object-contain select-none pointer-events-none"
+                            onLoad={() => {
+                              if (index === currentIndex && imageRefs.current[index]) {
+                                setCurrentHeight(imageRefs.current[index]!.offsetHeight)
+                              }
+                            }}
+                          />
+                        )}
                       </div>
                     )
                   })}

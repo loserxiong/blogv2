@@ -1,5 +1,6 @@
 ---
 import type { PhotoData } from '~/types'
+import { getImage } from 'astro:assets'
 import { cn } from '~/lib/utils'
 import PolaroidStack from './PolaroidStack'
 import TimelineIcon from './TimelineIcon.astro'
@@ -10,11 +11,35 @@ interface Props {
 }
 
 const { photoData, class: className } = Astro.props
+
+const optimizedPhotoData = await Promise.all(
+  photoData.map(async (timeline) => ({
+    ...timeline,
+    photos: await Promise.all(
+      timeline.photos.map(async (photo) => {
+        const [thumbnail, display] = await Promise.all([
+          getImage({ src: photo.src, width: 320, format: 'webp', quality: 70 }),
+          getImage({ src: photo.src, width: 1200, format: 'webp', quality: 82 }),
+        ])
+
+        return {
+          ...photo,
+          thumbnailSrc: thumbnail.src,
+          thumbnailWidth: thumbnail.attributes.width,
+          thumbnailHeight: thumbnail.attributes.height,
+          displaySrc: display.src,
+          displayWidth: display.attributes.width,
+          displayHeight: display.attributes.height,
+        }
+      })
+    ),
+  }))
+)
 ---
 
 <div class={cn(className)}>
   {
-    photoData.map((timeline, index) => (
+    optimizedPhotoData.map((timeline, index) => (
       <div class="timeline-item relative group/item opacity-0 animate-slide-down" style={`animation-delay: ${index * 0.1}s`}>
         <div class="flex gap-x-3">
           <div class="relative last:after:hidden after:absolute after:top-7 after:bottom-0 after:start-3.5 after:w-px after:-translate-x-[0.5px] after:bg-zinc-200/50 dark:after:bg-zinc-700/50">

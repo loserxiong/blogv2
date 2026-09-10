@@ -206,6 +206,12 @@ export type PolaroidVariant = '1x1' | '4x5' | '4x3' | '3x4' | '9x16'
  */
 export interface Photo {
   src: string | ImageMetadata
+  thumbnailSrc?: string
+  thumbnailWidth?: number
+  thumbnailHeight?: number
+  displaySrc?: string
+  displayWidth?: number
+  displayHeight?: number
   alt: string
   width: number
   height: number

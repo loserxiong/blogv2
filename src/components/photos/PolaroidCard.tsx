@@ -28,9 +28,9 @@ const PolaroidCard: React.FC<Props> = ({ photo, index, totalPhotos, rotation, va
   const moveDistance = index === 0 ? 0 : 25 // 第一张20px，第二张40px，第三张60px...
 
   // 处理图片源：支持字符串路径和 Astro ImageMetadata 对象
-  const imgSrc = typeof photo.src === 'string' ? photo.src : photo.src.src
-  const imgWidth = typeof photo.src === 'string' ? photo.width : photo.src.width
-  const imgHeight = typeof photo.src === 'string' ? photo.height : photo.src.height
+  const imgSrc = photo.thumbnailSrc || (typeof photo.src === 'string' ? photo.src : photo.src.src)
+  const imgWidth = photo.thumbnailWidth || (typeof photo.src === 'string' ? photo.width : photo.src.width)
+  const imgHeight = photo.thumbnailHeight || (typeof photo.src === 'string' ? photo.height : photo.src.height)
 
   return (
     <motion.div
