@@ -42,7 +42,7 @@ export const HEADER_LINKS: Link[] = [
 
 export const FOOTER_LINKS: Link[] = [
   {
-    name: '首页',
+    name: 'Home',
     url: '/',
   },
   {
