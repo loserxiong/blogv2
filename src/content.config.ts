@@ -36,7 +36,22 @@ const projects = defineCollection({
     z.object({
       name: z.string(),
       description: z.string(),
-      githubUrl: z.string(),
+      githubUrl: z.string().default(''),
+      routeSlug: z.preprocess(
+        (value) => (value === '' ? undefined : value),
+        z
+          .string()
+          .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
+          .optional()
+      ),
+      buttonLabel: z.string().default('访问项目'),
+      secondaryLabel: z.string().optional(),
+      secondaryUrl: z
+        .url({ protocol: /^https?$/ })
+        .or(z.literal(''))
+        .optional(),
+      platform: z.string().optional(),
+      order: z.number().default(0),
       website: z.string(),
       type: z.string(),
       icon: z.preprocess((value) => (value === '' ? undefined : value), image().optional()),

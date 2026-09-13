@@ -1,0 +1,33 @@
+---
+import type { CollectionEntry } from 'astro:content'
+interface Props {
+  project: CollectionEntry<'projects'>['data']
+}
+const { project } = Astro.props
+const secondaryUrl = project.secondaryUrl || project.githubUrl
+const secondaryLabel = project.secondaryLabel || (project.secondaryUrl ? '了解更多' : 'GitHub')
+---
+
+<div class="flex flex-wrap items-center gap-x-6 gap-y-4">
+  <a
+    href={project.website}
+    target="_blank"
+    rel="noopener noreferrer"
+    class="inline-flex items-center gap-2 rounded-md bg-primary px-5 py-3 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-4"
+  >
+    {project.buttonLabel}<span class="icon-[ph--arrow-up-right] size-4" aria-hidden="true"></span>
+  </a>
+  {
+    secondaryUrl && secondaryUrl !== project.website && (
+      <a
+        href={secondaryUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground hover:underline underline-offset-4"
+      >
+        {secondaryLabel}
+        <span class="icon-[ph--arrow-up-right] size-4" aria-hidden="true" />
+      </a>
+    )
+  }
+</div>

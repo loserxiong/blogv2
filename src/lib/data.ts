@@ -44,5 +44,9 @@ export async function getAllTags(): Promise<Record<string, number>> {
 // 获取project
 export async function getAllProjects(): Promise<CollectionEntry<'projects'>[]> {
   const allProjects = await getCollection('projects')
-  return allProjects.filter((project) => !project.data.draft)
+  return allProjects.filter((project) => !project.data.draft).sort((a, b) => a.data.order - b.data.order)
+}
+
+export function projectSlug(project: CollectionEntry<'projects'>): string {
+  return project.data.routeSlug || project.id.replace(/\/index$/, '').toLowerCase()
 }

@@ -1,0 +1,85 @@
+---
+import { Image } from 'astro:assets'
+import { render } from 'astro:content'
+import Layout from '~/layouts/Layout.astro'
+import Prose from '~/components/posts/base/Prose.astro'
+import ProjectActions from '~/components/projects/ProjectActions.astro'
+import { getAllProjects, projectSlug } from '~/lib/data'
+
+export async function getStaticPaths() {
+  const projects = await getAllProjects()
+  const slugs = new Set<string>()
+  return projects.map((entry) => {
+    const slug = projectSlug(entry)
+    if (slugs.has(slug)) throw new Error(`项目网址重复：${slug}`)
+    slugs.add(slug)
+    return { params: { slug }, props: { entry } }
+  })
+}
+const { entry } = Astro.props
+const project = entry.data
+const { Content } = await render(entry)
+const hasBody = Boolean(entry.body?.trim())
+---
+
+<Layout title={project.name} description={project.description}>
+  <article class="relative z-[1] px-6 sm:px-8 pt-8 pb-12 sm:pb-16">
+    <a href="/projects/" class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+      <span class="icon-[ph--arrow-left] size-4" aria-hidden="true"></span>所有项目
+    </a>
+    <header class="pt-12 sm:pt-16 pb-10 sm:pb-12">
+      {
+        project.icon && (
+          <Image src={project.icon} alt="" width={80} height={80} densities={[1, 2, 3]} format="png" class="size-16 object-contain mb-6" />
+        )
+      }
+      <h1 class="font-serif text-4xl sm:text-5xl tracking-tight leading-tight" data-pagefind-meta="title">{project.name}</h1>
+      <p class="mt-5 text-lg sm:text-xl leading-relaxed text-muted-foreground max-w-prose">{project.description}</p>
+      <div class="mt-7"><ProjectActions {project} /></div>
+      {project.platform && <p class="mt-4 text-xs tracking-wide text-muted-foreground">{project.platform}</p>}
+    </header>
+    {
+      project.preview && (
+        <figure class="mb-12 sm:mb-16">
+          <div class="overflow-hidden rounded-md border border-border/60 bg-muted/25 p-4 sm:p-6">
+            <Image
+              src={project.preview}
+              alt={project.previewAlt || `${project.name} 界面展示`}
+              width={Math.min(project.preview.width, 1600)}
+              quality={95}
+              style={{ maxWidth: `${project.preview.width / 2}px`, marginInline: 'auto' }}
+              class="w-full h-auto object-contain"
+              loading="eager"
+            />
+          </div>
+          {project.previewAlt && (
+            <figcaption class="mt-3 text-center text-xs leading-6 text-muted-foreground">{project.previewAlt}</figcaption>
+          )}
+        </figure>
+      )
+    }
+    {
+      hasBody && (
+        <>
+          <div class="project-story">
+            <Prose>
+              <Content />
+            </Prose>
+          </div>
+          <footer class="mt-12 sm:mt-16 border-t border-border/60 pt-8">
+            <ProjectActions {project} />
+          </footer>
+        </>
+      )
+    }
+  </article>
+</Layout>
+<style>
+  .project-story :global(.markdown) {
+    font-size: 1rem;
+    line-height: 1.9;
+  }
+  .project-story :global(.markdown > :first-child) {
+    margin-top: 0;
+  }
+</style>

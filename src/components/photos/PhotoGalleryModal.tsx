@@ -14,6 +14,8 @@ interface Props {
 
 const PhotoGalleryModal: React.FC<Props> = ({ photos, title, description, isOpen, onClose, initialIndex = 0 }) => {
   const [currentIndex, setCurrentIndex] = useState(initialIndex)
+  const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({})
+  const [failedImages, setFailedImages] = useState<Record<string, boolean>>({})
   const containerRef = useRef<HTMLDivElement>(null)
   const imageRefs = useRef<(HTMLDivElement | null)[]>([])
   const [containerWidth, setContainerWidth] = useState(400)
@@ -25,7 +27,12 @@ const PhotoGalleryModal: React.FC<Props> = ({ photos, title, description, isOpen
   // 动态获取容器宽度，适配响应式
   useEffect(() => {
     if (containerRef.current) {
-      setContainerWidth(containerRef.current.offsetWidth)
+      const element = containerRef.current
+      const updateWidth = () => setContainerWidth(element.offsetWidth)
+      updateWidth()
+      const observer = new ResizeObserver(updateWidth)
+      observer.observe(element)
+      return () => observer.disconnect()
     }
   }, [isOpen])
 
@@ -56,9 +63,12 @@ const PhotoGalleryModal: React.FC<Props> = ({ photos, title, description, isOpen
         setCurrentHeight(el.offsetHeight)
       }
     }
-    // 稍微延迟以确保渲染完成
-    const timer = setTimeout(updateHeight, 10)
-    return () => clearTimeout(timer)
+    updateHeight()
+    const element = imageRefs.current[currentIndex]
+    if (!element) return
+    const observer = new ResizeObserver(updateHeight)
+    observer.observe(element)
+    return () => observer.disconnect()
   }, [currentIndex, containerWidth, isOpen])
 
   useEffect(() => {
@@ -180,6 +190,8 @@ const PhotoGalleryModal: React.FC<Props> = ({ photos, title, description, isOpen
                   {photos.map((photo, index) => {
                     const imgSrc = photo.displaySrc || (typeof photo.src === 'string' ? photo.src : photo.src.src)
                     const shouldLoad = Math.abs(index - currentIndex) <= 1
+                    const imgWidth = photo.displayWidth || photo.width
+                    const imgHeight = photo.displayHeight || photo.height
                     return (
                       <div
                         key={imgSrc}
@@ -190,17 +202,49 @@ const PhotoGalleryModal: React.FC<Props> = ({ photos, title, description, isOpen
                         style={{ width: containerWidth }}
                       >
                         {shouldLoad && (
-                          <img
-                            draggable={false}
-                            src={imgSrc}
-                            alt={photo.alt}
-                            className="max-w-full max-h-[70vh] object-contain select-none pointer-events-none"
-                            onLoad={() => {
-                              if (index === currentIndex && imageRefs.current[index]) {
-                                setCurrentHeight(imageRefs.current[index]!.offsetHeight)
-                              }
-                            }}
-                          />
+                          <div
+                            className="relative flex items-center justify-center"
+                            style={{ width: containerWidth, height: `min(${(containerWidth * imgHeight) / imgWidth}px, 70vh)` }}
+                          >
+                            {photo.thumbnailSrc && !loadedImages[imgSrc] && (
+                              <img
+                                src={photo.thumbnailSrc}
+                                alt=""
+                                aria-hidden="true"
+                                className="absolute inset-0 w-full h-full object-contain"
+                              />
+                            )}
+                            <img
+                              width={imgWidth}
+                              height={imgHeight}
+                              decoding="async"
+                              ref={(img) => {
+                                if (img?.complete && img.naturalWidth > 0 && !loadedImages[imgSrc]) {
+                                  setLoadedImages((previous) => ({ ...previous, [imgSrc]: true }))
+                                }
+                              }}
+                              draggable={false}
+                              src={imgSrc}
+                              alt={photo.alt}
+                              className="relative w-full h-full object-contain select-none pointer-events-none transition-opacity duration-200"
+                              style={{ opacity: loadedImages[imgSrc] ? 1 : 0 }}
+                              onError={() => setFailedImages((previous) => ({ ...previous, [imgSrc]: true }))}
+                              onLoad={() => {
+                                setLoadedImages((previous) => ({ ...previous, [imgSrc]: true }))
+                                if (index === currentIndex && imageRefs.current[index]) {
+                                  setCurrentHeight(imageRefs.current[index]!.offsetHeight)
+                                }
+                              }}
+                            />
+                            {failedImages[imgSrc] && !loadedImages[imgSrc] && (
+                              <p
+                                role="status"
+                                className="absolute bottom-2 inset-x-2 bg-background/90 p-2 text-center text-xs text-muted-foreground"
+                              >
+                                清晰图片加载失败，请关闭后重试。
+                              </p>
+                            )}
+                          </div>
                         )}
                       </div>
                     )
