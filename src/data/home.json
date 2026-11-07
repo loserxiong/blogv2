@@ -1,0 +1,6 @@
+{
+  "sections": ["posts", "projects", "photos"],
+  "projectsLimit": 3,
+  "photosLimit": 2,
+  "photosPerAlbum": 4
+}

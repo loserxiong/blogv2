@@ -16,6 +16,30 @@ media_folder: src/assets/images/uploads
 public_folder: ../../assets/images/uploads
 
 collections:
+  - name: settings
+    label: 首页设置
+    editor: { preview: false }
+    files:
+      - name: home
+        label: 首页模块
+        file: src/data/home.json
+        fields:
+          - label: 首页模块与顺序
+            name: sections
+            widget: list
+            hint: '列表里有的模块才会显示在首页，拖动可以调整顺序；删掉某一项就不在首页显示。'
+            field:
+              {
+                label: 模块,
+                name: section,
+                widget: select,
+                options:
+                  [{ label: 文章 Posts, value: posts }, { label: 项目 Projects, value: projects }, { label: 照片 Photos, value: photos }],
+              }
+          - { label: 首页最多展示几个项目, name: projectsLimit, widget: number, value_type: int, min: 1, max: 12, default: 3 }
+          - { label: 首页最多展示几个照片集, name: photosLimit, widget: number, value_type: int, min: 1, max: 6, default: 2 }
+          - { label: 每个照片集展示几张照片, name: photosPerAlbum, widget: number, value_type: int, min: 1, max: 8, default: 4 }
+
   - name: posts
     label: 文章
     label_singular: 文章
@@ -66,6 +90,14 @@ collections:
       - { label: 说明, name: description, widget: text, required: false }
       - { label: 图标, name: icon, widget: string, default: '📷', required: false, hint: '填一个 emoji，例如 🏃、⛰️ 或 📷。' }
       - { label: 地点, name: travel, widget: string, required: false }
+      - {
+          label: 在首页展示,
+          name: homepage,
+          widget: boolean,
+          default: false,
+          required: false,
+          hint: '勾选后出现在首页的 Photos 模块；一个都不勾选时首页展示最新的照片集。',
+        }
       - { label: 草稿, name: draft, widget: boolean, default: false, required: false }
       - label: 照片
         name: photos
@@ -125,6 +157,14 @@ collections:
       - { label: 图标样式, name: imageClass, widget: string, required: false, hint: '通常留空；只有需要额外 CSS 样式时才填写。' }
       - { label: Star 数量, name: star, widget: number, value_type: int, min: 0, default: 0 }
       - { label: Fork 数量, name: fork, widget: number, value_type: int, min: 0, default: 0 }
+      - {
+          label: 在首页展示,
+          name: homepage,
+          widget: boolean,
+          default: false,
+          required: false,
+          hint: '勾选后出现在首页的 Projects 模块；一个都不勾选时首页按排序展示前几个项目。',
+        }
       - { label: 草稿, name: draft, widget: boolean, default: false, required: false }
       - {
           label: 详细介绍,

@@ -60,6 +60,7 @@ const projects = defineCollection({
       imageClass: z.string().optional(),
       star: z.number(),
       fork: z.number(),
+      homepage: z.boolean().default(false),
       draft: z.boolean().default(false),
     }),
 })
@@ -73,6 +74,7 @@ const photos = defineCollection({
       date: z.date(),
       icon: z.string().default('📷'),
       travel: z.string().optional(),
+      homepage: z.boolean().default(false),
       draft: z.boolean().default(false),
       photos: z
         .array(

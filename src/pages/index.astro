@@ -7,7 +7,11 @@ import GithubContributions from '~/components/base/GithubContributions.tsx'
 import SocialLink from '~/components/base/SocialLink.astro'
 import List from '~/components/posts/card/List.astro'
 import SkillsShowcase from '~/components/base/SkillsShowcase.astro'
-import { getNumPosts, getPinnedPosts } from '~/lib/data'
+import HomeProjects from '~/components/home/HomeProjects.astro'
+import HomePhotos from '~/components/home/HomePhotos.astro'
+import { getHomeProjects, getNumPosts, getPinnedPosts } from '~/lib/data'
+import { getHomePhotos } from '~/lib/photos'
+import homeSettings from '~/data/home.json'
 
 const { ENABLED, GITHUB_USERNAME, TOOLTIP_ENABLED } = GITHUB_CONFIG
 const { size, type } = POSTS_CONFIG.homePageConfig
@@ -21,6 +25,20 @@ if (hasPinnedPosts) {
 } else {
   showPosts = await getNumPosts(size)
 }
+
+// 首页模块由 CMS「首页设置」控制：列表里的模块按顺序显示
+const knownSections = ['posts', 'projects', 'photos'] as const
+type Section = (typeof knownSections)[number]
+const toCount = (value: unknown, fallback: number) => {
+  const count = Number(value)
+  return Number.isInteger(count) && count > 0 ? count : fallback
+}
+const sections = [...new Set(Array.isArray(homeSettings.sections) ? homeSettings.sections : ['posts'])].filter(
+  (section): section is Section => (knownSections as readonly string[]).includes(section)
+)
+const homeProjects = sections.includes('projects') ? await getHomeProjects(toCount(homeSettings.projectsLimit, 3)) : []
+const homePhotos = sections.includes('photos') ? await getHomePhotos(toCount(homeSettings.photosLimit, 2)) : []
+const photosPerAlbum = toCount(homeSettings.photosPerAlbum, 4)
 ---
 
 <Layout title="首页" description={SITE.description}>
@@ -82,16 +100,56 @@ if (hasPinnedPosts) {
         </>
       )
     }
-    <SectionDivider />
-    <div class="py-6 pb-8 px-6 sm:px-8">
-      <div class="flex items-center justify-between gap-4">
-        <h2 class="text-2xl tracking-tight">Posts</h2>
-        <a href="/posts" class="text-sm text-muted-foreground hover:text-[var(--color-highlight)] flex items-center gap-2"
-          >全部文章 <span aria-hidden="true" class="icon-[ph--arrow-up-right] size-4"></span></a
-        >
-      </div>
-      <p class="text-muted-foreground text-sm mb-6 mt-1.5">记录下最近的输出和思考</p>
-      <List posts={showPosts} {type} coverLayout={POSTS_CONFIG.homePageConfig?.coverLayout} />
-    </div>
+    {
+      sections.map((section) => (
+        <>
+          {section === 'posts' && (
+            <>
+              <SectionDivider />
+              <div class="py-6 pb-8 px-6 sm:px-8">
+                <div class="flex items-center justify-between gap-4">
+                  <h2 class="text-2xl tracking-tight">Posts</h2>
+                  <a href="/posts" class="text-sm text-muted-foreground hover:text-[var(--color-highlight)] flex items-center gap-2">
+                    全部文章 <span aria-hidden="true" class="icon-[ph--arrow-up-right] size-4" />
+                  </a>
+                </div>
+                <p class="text-muted-foreground text-sm mb-6 mt-1.5">记录下最近的输出和思考</p>
+                <List posts={showPosts} {type} coverLayout={POSTS_CONFIG.homePageConfig?.coverLayout} />
+              </div>
+            </>
+          )}
+          {section === 'projects' && homeProjects.length > 0 && (
+            <>
+              <SectionDivider />
+              <div class="py-6 pb-8 px-6 sm:px-8">
+                <div class="flex items-center justify-between gap-4">
+                  <h2 class="text-2xl tracking-tight">Projects</h2>
+                  <a href="/projects" class="text-sm text-muted-foreground hover:text-[var(--color-highlight)] flex items-center gap-2">
+                    全部项目 <span aria-hidden="true" class="icon-[ph--arrow-up-right] size-4" />
+                  </a>
+                </div>
+                <p class="text-muted-foreground text-sm mb-2 mt-1.5">业余时间做的小工具</p>
+                <HomeProjects projects={homeProjects} />
+              </div>
+            </>
+          )}
+          {section === 'photos' && homePhotos.length > 0 && (
+            <>
+              <SectionDivider />
+              <div class="py-6 pb-8 px-6 sm:px-8">
+                <div class="flex items-center justify-between gap-4">
+                  <h2 class="text-2xl tracking-tight">Photos</h2>
+                  <a href="/photos" class="text-sm text-muted-foreground hover:text-[var(--color-highlight)] flex items-center gap-2">
+                    全部照片 <span aria-hidden="true" class="icon-[ph--arrow-up-right] size-4" />
+                  </a>
+                </div>
+                <p class="text-muted-foreground text-sm mb-6 mt-1.5">路上和赛道上的瞬间</p>
+                <HomePhotos albums={homePhotos} perAlbum={photosPerAlbum} />
+              </div>
+            </>
+          )}
+        </>
+      ))
+    }
   </div>
 </Layout>

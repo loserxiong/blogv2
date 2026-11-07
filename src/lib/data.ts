@@ -50,3 +50,10 @@ export async function getAllProjects(): Promise<CollectionEntry<'projects'>[]> {
 export function projectSlug(project: CollectionEntry<'projects'>): string {
   return project.data.routeSlug || project.id.replace(/\/index$/, '').toLowerCase()
 }
+
+// 首页项目：优先展示勾选了「首页展示」的项目；一个都没勾选时展示排序最靠前的项目
+export async function getHomeProjects(limit: number): Promise<CollectionEntry<'projects'>[]> {
+  const projects = await getAllProjects()
+  const picked = projects.filter((project) => project.data.homepage)
+  return (picked.length > 0 ? picked : projects).slice(0, limit)
+}
