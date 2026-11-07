@@ -1,0 +1,53 @@
+---
+import { Image } from 'astro:assets'
+import type { CollectionEntry } from 'astro:content'
+import { projectSlug } from '~/lib/data'
+
+interface Props {
+  projects: CollectionEntry<'projects'>[]
+}
+
+const { projects } = Astro.props
+---
+
+<ul class="divide-y divide-border/60">
+  {
+    projects.map((entry) => {
+      const project = entry.data
+      const href = `/projects/${projectSlug(entry)}/`
+      return (
+        <li>
+          <a href={href} class="group flex items-center gap-4 py-4">
+            <span class="flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-md border border-border/60 bg-muted/25">
+              {project.icon ? (
+                <Image
+                  src={project.icon}
+                  alt=""
+                  width={40}
+                  height={40}
+                  densities={[1, 2, 3]}
+                  format="png"
+                  class="size-8 object-contain"
+                  loading="lazy"
+                />
+              ) : (
+                <span class="font-serif text-lg">{project.name.slice(0, 1)}</span>
+              )}
+            </span>
+            <span class="min-w-0 grow">
+              <span class="flex items-center gap-2">
+                <span class="font-semibold tracking-tight group-hover:text-[var(--color-highlight)] transition-colors">{project.name}</span>
+                {project.platform && <span class="text-xs text-muted-foreground">{project.platform}</span>}
+              </span>
+              <span class="mt-0.5 block text-sm leading-6 text-muted-foreground">{project.description}</span>
+            </span>
+            <span
+              class="icon-[ph--arrow-right] size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-[var(--color-highlight)]"
+              aria-hidden="true"
+            />
+          </a>
+        </li>
+      )
+    })
+  }
+</ul>
