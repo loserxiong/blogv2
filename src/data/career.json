@@ -1,6 +1,13 @@
 {
   "items": [
     {
+      "company": "韶音科技 Shokz",
+      "role": "软件产品经理",
+      "start": "2025.08",
+      "end": "",
+      "description": "负责软件功能规划。"
+    },
+    {
       "company": "Keep",
       "role": "AIoT 智能硬件软件产品经理",
       "start": "2024.04",
