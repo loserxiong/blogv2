@@ -1,5 +1,5 @@
 {
-  "sections": ["posts", "projects", "photos"],
+  "sections": ["posts", "projects", "photos", "career"],
   "projectsLimit": 3,
   "photosLimit": 2,
   "photosPerAlbum": 4

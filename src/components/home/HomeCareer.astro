@@ -1,0 +1,43 @@
+---
+export interface CareerItem {
+  company: string
+  role: string
+  start: string
+  end?: string
+  description?: string
+}
+
+interface Props {
+  label: string
+  items: CareerItem[]
+}
+
+const { label, items } = Astro.props
+---
+
+<h3 class="mb-2 text-xs font-medium tracking-wide text-muted-foreground">{label}</h3>
+<ol class="divide-y divide-border/60 border-t border-border/60">
+  {
+    items.map((item) => (
+      <li class="grid gap-x-8 gap-y-1.5 py-5 sm:grid-cols-[7.5rem_1fr]">
+        <p class="flex items-center gap-2.5 text-sm tabular-nums text-muted-foreground sm:items-start sm:pt-0.5">
+          <span class="size-1.5 shrink-0 rounded-full bg-[var(--color-highlight)] sm:mt-1.5" aria-hidden="true" />
+          <span>
+            {item.start} – <br class="max-sm:hidden" />
+            {item.end || '至今'}
+          </span>
+        </p>
+        <div>
+          <h4 class="font-semibold tracking-tight">
+            {item.company}
+            <span class="px-1 text-muted-foreground" aria-hidden="true">
+              ·
+            </span>
+            {item.role}
+          </h4>
+          {item.description && <p class="mt-1.5 text-sm leading-6 text-muted-foreground">{item.description}</p>}
+        </div>
+      </li>
+    ))
+  }
+</ol>

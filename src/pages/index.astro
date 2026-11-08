@@ -12,6 +12,8 @@ import HomePhotos from '~/components/home/HomePhotos.astro'
 import { getHomeProjects, getNumPosts, getPinnedPosts } from '~/lib/data'
 import { getHomePhotos } from '~/lib/photos'
 import homeSettings from '~/data/home.json'
+import career from '~/data/career.json'
+import HomeCareer, { type CareerItem } from '~/components/home/HomeCareer.astro'
 
 const { ENABLED, GITHUB_USERNAME, TOOLTIP_ENABLED } = GITHUB_CONFIG
 const { size, type } = POSTS_CONFIG.homePageConfig
@@ -27,7 +29,7 @@ if (hasPinnedPosts) {
 }
 
 // 首页模块由 CMS「首页设置」控制：列表里的模块按顺序显示
-const knownSections = ['posts', 'projects', 'photos'] as const
+const knownSections = ['posts', 'projects', 'photos', 'career'] as const
 type Section = (typeof knownSections)[number]
 const toCount = (value: unknown, fallback: number) => {
   const count = Number(value)
@@ -39,6 +41,10 @@ const sections = [...new Set(Array.isArray(homeSettings.sections) ? homeSettings
 const homeProjects = sections.includes('projects') ? await getHomeProjects(toCount(homeSettings.projectsLimit, 3)) : []
 const homePhotos = sections.includes('photos') ? await getHomePhotos(toCount(homeSettings.photosLimit, 2)) : []
 const photosPerAlbum = toCount(homeSettings.photosPerAlbum, 4)
+const validItems = (list: unknown): CareerItem[] =>
+  (Array.isArray(list) ? list : []).filter((item) => item?.company && item?.role && item?.start)
+const careerItems = validItems(career.items)
+const educationItems = validItems(career.education)
 ---
 
 <Layout title="首页" description={SITE.description}>
@@ -145,6 +151,19 @@ const photosPerAlbum = toCount(homeSettings.photosPerAlbum, 4)
                 </div>
                 <p class="text-muted-foreground text-sm mb-6 mt-1.5">路上和赛道上的瞬间</p>
                 <HomePhotos albums={homePhotos} perAlbum={photosPerAlbum} />
+              </div>
+            </>
+          )}
+          {section === 'career' && careerItems.length + educationItems.length > 0 && (
+            <>
+              <SectionDivider />
+              <div class="py-6 pb-8 px-6 sm:px-8">
+                <h2 class="text-2xl tracking-tight">Career</h2>
+                <p class="text-muted-foreground text-sm mb-6 mt-1.5">工作与教育经历</p>
+                <div class="space-y-8">
+                  {careerItems.length > 0 && <HomeCareer label="工作经历" items={careerItems} />}
+                  {educationItems.length > 0 && <HomeCareer label="教育经历" items={educationItems} />}
+                </div>
               </div>
             </>
           )}
