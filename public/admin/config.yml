@@ -34,11 +34,31 @@ collections:
                 name: section,
                 widget: select,
                 options:
-                  [{ label: 文章 Posts, value: posts }, { label: 项目 Projects, value: projects }, { label: 照片 Photos, value: photos }],
+                  [
+                    { label: 文章 Posts, value: posts },
+                    { label: 项目 Projects, value: projects },
+                    { label: 照片 Photos, value: photos },
+                    { label: 工作经历 Career, value: career },
+                  ],
               }
           - { label: 首页最多展示几个项目, name: projectsLimit, widget: number, value_type: int, min: 1, max: 12, default: 3 }
           - { label: 首页最多展示几个照片集, name: photosLimit, widget: number, value_type: int, min: 1, max: 6, default: 2 }
           - { label: 每个照片集展示几张照片, name: photosPerAlbum, widget: number, value_type: int, min: 1, max: 8, default: 4 }
+      - name: career
+        label: 工作经历
+        file: src/data/career.json
+        fields:
+          - label: 工作经历
+            name: items
+            widget: list
+            summary: '{{fields.company}} · {{fields.role}}'
+            hint: '按时间从新到旧排列，拖动可以调整顺序。'
+            fields:
+              - { label: 公司, name: company, widget: string }
+              - { label: 职位, name: role, widget: string }
+              - { label: 开始时间, name: start, widget: string, hint: '例如 2024.04' }
+              - { label: 结束时间, name: end, widget: string, required: false, hint: '留空表示「至今」' }
+              - { label: 一句话介绍, name: description, widget: text, required: false }
 
   - name: posts
     label: 文章
