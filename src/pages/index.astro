@@ -41,9 +41,10 @@ const sections = [...new Set(Array.isArray(homeSettings.sections) ? homeSettings
 const homeProjects = sections.includes('projects') ? await getHomeProjects(toCount(homeSettings.projectsLimit, 3)) : []
 const homePhotos = sections.includes('photos') ? await getHomePhotos(toCount(homeSettings.photosLimit, 2)) : []
 const photosPerAlbum = toCount(homeSettings.photosPerAlbum, 4)
-const careerItems: CareerItem[] = (Array.isArray(career.items) ? career.items : []).filter(
-  (item) => item?.company && item?.role && item?.start
-)
+const validItems = (list: unknown): CareerItem[] =>
+  (Array.isArray(list) ? list : []).filter((item) => item?.company && item?.role && item?.start)
+const careerItems = validItems(career.items)
+const educationItems = validItems(career.education)
 ---
 
 <Layout title="首页" description={SITE.description}>
@@ -153,13 +154,16 @@ const careerItems: CareerItem[] = (Array.isArray(career.items) ? career.items : 
               </div>
             </>
           )}
-          {section === 'career' && careerItems.length > 0 && (
+          {section === 'career' && careerItems.length + educationItems.length > 0 && (
             <>
               <SectionDivider />
               <div class="py-6 pb-8 px-6 sm:px-8">
                 <h2 class="text-2xl tracking-tight">Career</h2>
-                <p class="text-muted-foreground text-sm mb-6 mt-1.5">工作经历</p>
-                <HomeCareer items={careerItems} />
+                <p class="text-muted-foreground text-sm mb-6 mt-1.5">工作与教育经历</p>
+                <div class="space-y-8">
+                  {careerItems.length > 0 && <HomeCareer label="工作经历" items={careerItems} />}
+                  {educationItems.length > 0 && <HomeCareer label="教育经历" items={educationItems} />}
+                </div>
               </div>
             </>
           )}

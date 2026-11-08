@@ -8,12 +8,14 @@ export interface CareerItem {
 }
 
 interface Props {
+  label: string
   items: CareerItem[]
 }
 
-const { items } = Astro.props
+const { label, items } = Astro.props
 ---
 
+<h3 class="mb-2 text-xs font-medium tracking-wide text-muted-foreground">{label}</h3>
 <ol class="divide-y divide-border/60 border-t border-border/60">
   {
     items.map((item) => (
@@ -26,13 +28,13 @@ const { items } = Astro.props
           </span>
         </p>
         <div>
-          <h3 class="font-semibold tracking-tight">
+          <h4 class="font-semibold tracking-tight">
             {item.company}
             <span class="px-1 text-muted-foreground" aria-hidden="true">
               ·
             </span>
             {item.role}
-          </h3>
+          </h4>
           {item.description && <p class="mt-1.5 text-sm leading-6 text-muted-foreground">{item.description}</p>}
         </div>
       </li>

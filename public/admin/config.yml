@@ -59,6 +59,17 @@ collections:
               - { label: 开始时间, name: start, widget: string, hint: '例如 2024.04' }
               - { label: 结束时间, name: end, widget: string, required: false, hint: '留空表示「至今」' }
               - { label: 一句话介绍, name: description, widget: text, required: false }
+          - label: 教育经历
+            name: education
+            widget: list
+            required: false
+            summary: '{{fields.company}} · {{fields.role}}'
+            fields:
+              - { label: 学校, name: company, widget: string }
+              - { label: 专业与学位, name: role, widget: string, hint: '例如 用户体验设计 硕士' }
+              - { label: 开始时间, name: start, widget: string, hint: '例如 2019.09' }
+              - { label: 结束时间, name: end, widget: string, required: false, hint: '留空表示「至今」' }
+              - { label: 补充说明, name: description, widget: text, required: false }
 
   - name: posts
     label: 文章
