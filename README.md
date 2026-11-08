@@ -1,137 +1,82 @@
-<div align="center">
-<img src="./src/assets/readme/logo.png" width="400" alt="Litos Logo" />
+# Jiasheng's Blog
 
-![License](https://img.shields.io/github/license/Dnzzk2/Litos?color=blue&style=flat-square)
-![Astro](https://img.shields.io/badge/Astro-v5.0-orange?style=flat-square&logo=astro)
-![React](https://img.shields.io/badge/React-v19.0-blue?style=flat-square&logo=react)
-![Tailwind](https://img.shields.io/badge/TailwindCSS-v4.0-38b2ac?style=flat-square&logo=tailwindcss)
-![TypeScript](https://img.shields.io/badge/TypeScript-v5.0-blue?style=flat-square&logo=typescript)
+熊佳盛（Jaason Xiong）的个人网站：<https://jaasonxiong.work>
 
-**A modern, elegant, and performance-focused blogging theme built for developers.**
+写文章、放做过的小工具、存旅行和比赛照片，也记录工作经历。
 
-**English** | [简体中文](./README.zh-CN.md)
+## 内容
 
-[Demo](https://litos.vercel.app/) · [Report Bug](https://github.com/Dnzzk2/Litos/issues) · [Request Feature](https://github.com/Dnzzk2/Litos/issues)
+| 栏目     | 地址        | 内容存放位置                                     |
+| -------- | ----------- | ------------------------------------------------ |
+| 首页     | `/`         | `src/pages/index.astro`，模块设置在 `src/data/`  |
+| 文章     | `/posts`    | `src/content/posts/*.md`                         |
+| 项目     | `/projects` | `src/content/projects/<项目>/index.mdx`          |
+| 照片     | `/photos`   | `src/content/photos/*.md`，图片在 `src/assets/photos/uploads/` |
+| 标签     | `/tags`     | 由文章标签自动生成                               |
+| RSS      | `/rss.xml`、`/atom.xml` | 自动生成                             |
 
-</div>
+首页由几个模块组成：自我介绍、Posts、Projects、Photos、Career（工作与教育经历）。显示哪些模块、按什么顺序显示，都在后台设置。
 
-## Introduction
+## 日常更新：用后台
 
-Litos is a comprehensive blogging theme crafted with **Astro**, **React**, and **TailwindCSS**. It is designed to provide developers with a clean, professional, and highly customizable platform to showcase their work, thoughts, and photography.
+打开 <https://jaasonxiong.work/admin>，用 GitHub 账号登录（基于 [Decap CMS](https://decapcms.org/)）。
 
-Unlike traditional themes, Litos emphasizes visual aesthetics without compromising on performance. It features fluid animations, a polished design system, and a robust set of built-in components to help you build your personal brand effectively.
+- **文章 / 照片集 / Projects**：新建或修改内容。项目和照片集勾选「在首页展示」后会出现在首页；一个都不勾时，首页自动展示排序最前的项目和最新的照片集。
+- **首页设置 → 首页模块**：选择首页显示哪些模块，拖动调整顺序，设置展示数量。
+- **首页设置 → 工作经历**：编辑工作经历和教育经历。结束时间留空显示「至今」。
 
-![Cover image](./src/assets/readme/readme.webp)
+后台保存后会直接提交到 GitHub 的 `main` 分支，Netlify 自动重新部署，一两分钟后线上更新。后台配置在 `public/admin/config.yml`。
 
-## Key Features
+## 部署
 
-- **Modern Architecture** — Astro 5 + React 19 for blazing fast performance and dynamic interactivity.
-- **Elegant Design** — Fully responsive, meticulously crafted UI with TailwindCSS 4.
-- **Posts** — Multiple layout options (compact, cover image) with rich Markdown support.
-- **Projects** — Dedicated portfolio section with filterable tags.
-- **Photos** — Beautiful masonry layout for photography collections.
-- **Skills Showcase** — Visually represented technical stack configuration.
-- **Code Highlighting** — Integrated Expressive Code for beautiful syntax highlighting.
-- **Math Support** — KaTeX for rendering mathematical equations.
-- **Comments** — Gitalk integration for GitHub-based discussions.
-- **SEO** — Built-in sitemaps, robots.txt, and meta tags.
-- **Analytics** — Configurable Vercount and Umami analytics.
-- **Dark Mode** — Native light and dark theme support.
-
-## Deploy
-
-Deploy your own Litos blog with one click:
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Dnzzk2/Litos)
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/Dnzzk2/Litos)
-
-## Getting Started
-
-### Prerequisites
-
-- **Node.js** (v18 or higher)
-- **pnpm** (recommended)
-
-### Installation
-
-1.  **Clone the repository**
-
-    ```bash
-    git clone https://github.com/Dnzzk2/Litos.git
-    cd Litos
-    ```
-
-2.  **Install dependencies**
-
-    ```bash
-    pnpm install
-    ```
-
-3.  **Start the development server**
-
-    ```bash
-    pnpm dev
-    ```
-
-    Your site should now be running at `http://localhost:4321`.
-
-## Configuration
-
-The primary configuration file is located at `src/config.ts`.
-
-### Site Settings
-```typescript
-export const SITE: Site = {
-  title: 'Litos',
-  description: 'Your site description here.',
-  website: 'https://your-domain.com',
-  author: 'Your Name',
-  // ...other settings
-}
+```
+后台或代码提交 → GitHub main 分支 → Netlify 自动构建 → jaasonxiong.work
 ```
 
-### Feature Toggles
-```typescript
-export const SKILLSSHOWCASE_CONFIG = {
-  SKILLS_ENABLED: true,
-  // ...
-}
+- 托管在 **Netlify**，配置见 `netlify.toml`：Node 22，构建命令 `pnpm run build`，发布 `dist/`。
+- 构建包含三步：
+  1. `astro check`：类型检查，内容字段填错会让构建失败，线上保持旧版本。
+  2. `astro build`：生成静态页面，图片压缩为 WebP。
+  3. `postbuild`：生成 Pagefind 站内搜索索引，并运行 `scripts/check-photo-build.mjs` 检查照片都已压缩到体积预算以内。
+- 给 `main` 开 Pull Request 时，Netlify 会生成一个 Deploy Preview 预览地址，合并前可以先看效果。
 
-export const GITHUB_CONFIG = {
-  ENABLED: true,
-  // ...
-}
+## 本地开发
+
+需要 Node.js 22 和 pnpm。
+
+```bash
+pnpm install
 ```
 
-### Navigation
-Links for the Header and Footer can be managed via `HEADER_LINKS` and `FOOTER_LINKS`.
+```bash
+pnpm dev
+```
 
-## Scripts
+打开 <http://localhost:4321>。
 
-| Script | Description |
-| :--- | :--- |
-| `pnpm dev` | Starts the local development server. |
-| `pnpm build` | Builds the site for production. |
-| `pnpm preview` | Previews the built production site locally. |
-| `pnpm format` | Formats code using Prettier. |
-| `pnpm check` | Runs Astro check for diagnostics. |
+其他命令：
 
-## License
+```bash
+pnpm run build
+```
 
-Distributed under the MIT License. See [MIT LICENSE](LICENSE) for more information.
+```bash
+pnpm run format:write
+```
 
-## Star History
+## 配置
 
-<a href="https://www.star-history.com/#Dnzzk2/Litos&type=date&legend=top-left">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=Dnzzk2/Litos&type=date&theme=dark&legend=top-left" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=Dnzzk2/Litos&type=date&legend=top-left" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=Dnzzk2/Litos&type=date&legend=top-left" />
- </picture>
-</a>
+- `src/config.ts`：站点信息、导航、社交链接、评论、统计等开关。
+- `src/data/home.json`：首页模块与展示数量（后台可改）。
+- `src/data/career.json`：工作与教育经历（后台可改）。
+- `src/content.config.ts`：文章、项目、照片集的字段定义。
 
----
+访问统计使用 [Umami](https://umami.is/)，在 `src/config.ts` 的 `ANALYTICS_CONFIG` 中配置。
 
-<p align="center">
-made with 💗 by <a href="https://github.com/Dnzzk2">Dnzzk2</a> !
-</p>
+## 技术栈
+
+[Astro](https://astro.build/) · [React](https://react.dev/) · [Tailwind CSS](https://tailwindcss.com/) · MDX · [Expressive Code](https://expressive-code.com/) · KaTeX · [Pagefind](https://pagefind.app/) · Decap CMS · Netlify
+
+## 致谢
+
+网站基于 [Litos](https://github.com/Dnzzk2/Litos) 主题修改，原主题以 MIT 协议开源，见 [LICENSE](./LICENSE)。
